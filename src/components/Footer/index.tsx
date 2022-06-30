@@ -1,3 +1,5 @@
+import IconLabel from '../IconLabel'
+
 import Container, { Divider, Title } from './index.styles'
 
 
@@ -6,15 +8,15 @@ const Footer = () =>
     <Divider>
       <Title>Project repo</Title>
 
-      <span><a href=''>GitHub</a></span>
+      <a href='github.com/pandasoli/brainfuck.org'>GitHub</a>
     </Divider>
 
     <Divider>
       <Title>Credits</Title>
 
-      <span><a href='github.com/pandasoli'>GitHub/PandaSoli</a></span>
-      <span><a href='instagram.com/pandasoli.ofc'>Instagram/PandaSoli.ofc</a></span>
-      <span><a href='facebook.com/pandasoli.ofc'>Facebook/PandaSoli.ofc</a></span>
+      <IconLabel icon='github' text='pandasoli' link='github.com/pandasoli'/>
+      <IconLabel icon='instagram' text='pandasoli.ofc' link='instagram.com/pandasoli.ofc'/>
+      <IconLabel icon='facebook' text='pandasoli.ofc' link='facebook.com/pandasoli.ofc'/>
     </Divider>
   </Container>
 

@@ -7,7 +7,7 @@ import {
 import Memory from '../components/Memory'
 import P from '../components/Paragraph.styles'
 import Code from '../components/Code'
-import * as Table from '../components/Table'
+import Table, { Cel as TableCel, Item as TableItem } from '../components/Table'
 
 
 const Home = () => {
@@ -51,16 +51,16 @@ const Home = () => {
         The only language commands are:
       </P>
 
-      <Table.default columns={[ 'Command', 'Description' ]}>
+      <Table columns={[ 'Command', 'Description' ]}>
         {
           Commands.map(($, _) =>
-            <Table.Cel key={ _ }>
-              <Table.Item><Code code={ $.command }/></Table.Item>
-              <Table.Item>{ $.description }</Table.Item>
-            </Table.Cel>
+            <TableCel key={ _ }>
+              <TableItem><Code code={ $.command } language='brainfuck' noCopy/></TableItem>
+              <TableItem>{ $.description }</TableItem>
+            </TableCel>
           )
         }
-      </Table.default>
+      </Table>
     </Main>
   </>
 }

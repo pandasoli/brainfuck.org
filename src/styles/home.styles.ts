@@ -5,7 +5,8 @@ export const Hero = styled.section`
   display: flex;
   flex-direction: column;
 
-  height: 96vh;
+  width: 100vw;
+  height: 97vh;
 
   background-image: url('/images/background.jpg');
   background-position: 50%;

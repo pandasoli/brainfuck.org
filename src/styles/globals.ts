@@ -43,8 +43,8 @@ export const GlobalStyle = createGlobalStyle`
     --primary-cl: #05090e;
     --primary-cl-light: #0b121c;
     --secondary-cl: #d2de78;
-    --red: #e82f2c;
-    --yellow: #dee82c;
+
+    --secondary-cl-rgb: 210, 222, 120;
 
     --box-shadow: 0px 0px 3px var(--secondary-cl);
 
@@ -86,6 +86,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .btn {
+    --cl: var(--primary-font-cl);
+
     display: inline-block;
 
     margin: 4px;
@@ -101,26 +103,30 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     user-select: none;
 
-    color: var(--primary-font-cl);
+    color: var(--cl);
     border-radius: 25px;
     transition: opacity .6s, background-color .6s, color .2s;
     background-color: transparent;
-    border: 1px solid var(--primary-font-cl);
+    border: 1px solid var(--cl);
 
-    /* a {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    &.mini {
+      padding: 5px 40px;
+    }
 
-      height: 100%;
-      width: 100%;
+    &.success {
+      --cl: var(--bs-teal);
+    }
 
-      padding: 9px 40px;
+    &:hover:not([disabled]),
+    &:focus {
+      color: var(--primary-cl);
+      border: 1px solid var(--cl);
+      background-color: var(--cl);
 
-      opacity: 1;
-      text-decoration: none;
-    } */
+      &:focus {
+        box-shadow: 0 0 0 .25rem #e7f0eaad;
+      }
+    }
 
     &[disabled] {
       opacity: .7;
@@ -129,41 +135,31 @@ export const GlobalStyle = createGlobalStyle`
         cursor: no-drop;
       }
     }
+  }
 
-    /* &.mini {
-      padding: 5px 40px;
+  input[type='text'].form-control,
+  input[type='number'].form-control {
+    transition: color .2s;
+    border-color: var(--primary-cl-light);
+    background-color: var(--primary-cl-light);
 
-      &.link {
-        padding: 0px;
-
-        a {
-          padding: 5px 40px;
-        }
-      }
+    &:focus {
+      color: var(--primary-font-cl);
+      box-shadow: 0 0 0 .25rem rgb(var(--secondary-cl-rgb), .68);
     }
-
-    &.link {
-      padding: 0px;
-    } */
-
-    &:hover:not([disabled]) {
-      color: var(--primary-cl);
-      border: 1px solid var(--primary-font-cl);
-      background-color: var(--primary-font-cl);
+  }
+  
+  input[type='checkbox'].form-check-input {
+    border-color: var(--primary-cl-light);
+    background-color: var(--primary-cl-light);
+    
+    &:checked {
+      background-color: var(--secondary-cl);
     }
-/* 
-    @mixin colored-shadows($color) {
-      box-shadow: 0px 0px 3px $color;
-      border-color: $color;
+  
+    &:focus {
+      box-shadow: 0 0 0 .25rem rgb(var(--secondary-cl-rgb), .68);
     }
-
-    &.err {
-      @include colored-shadows(#c34040);
-    }
-
-    &.success {
-      @include colored-shadows(#25d42e);
-    } */
   }
 
   a {
@@ -173,25 +169,6 @@ export const GlobalStyle = createGlobalStyle`
       color: var(--secondary-cl);
     }
   }
-
-  /* .btn.btn-primary:focus,
-  .navbar-toggler:focus,
-  .form-control:focus {
-    box-shadow: 0 0 0 0.25rem rgba(67, 237, 116, .8);
-  } */
-
-  /* .btn.btn-primary {
-    margin: 5px;
-
-    background-color: var(--primary-cl);
-    border-color: var(--secondary-cl);
-
-    &:hover *,
-    &:hover {
-      color: var(--white) !important;
-      background-color: var(--primary-cl-light);
-    }
-  } */
 
   ::selection {
     color: var(--primary-cl);
@@ -207,7 +184,7 @@ export const GlobalStyle = createGlobalStyle`
 
   ::-webkit-scrollbar-thumb {
     border-radius: 6px;
-    background-color: var(--primary-cl);
+    background-color: var(--secondary-cl);
   }
 
   span {
@@ -228,7 +205,7 @@ export const GlobalStyle = createGlobalStyle`
       right: 100%;
       z-index: 99;
 
-      background-color: var(--primary-cl);
+      background-color: var(--secondary-cl);
     }
   }
 

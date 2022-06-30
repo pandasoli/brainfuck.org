@@ -10,6 +10,7 @@ export default styled.section`
 export const Contents = styled.main`
   display: flex;
   flex-direction: column;
+  align-items: center;
   flex-grow: 1;
 
   overflow: auto;

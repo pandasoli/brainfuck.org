@@ -28,8 +28,6 @@ const To = () => {
   const [ Interpreter, SetInterpreter ] = useState<Generator>({} as Generator)
   const [ Timer, SetTimer ] = useState<NodeJS.Timeout>({} as NodeJS.Timeout)
 
-  document.title += ' | To Brainfuck'
-
   const interpreterNext= useCallback((_step?: boolean) => {
     const response = Interpreter.next()
     SetResult(response.value)

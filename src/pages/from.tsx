@@ -50,8 +50,6 @@ const From = () => {
   const [ Interpreter, SetInterpreter ] = useState<Generator>({} as Generator)
   const [ Timer, SetTimer ] = useState<NodeJS.Timeout>({} as NodeJS.Timeout)
 
-  document.title += ' | From Brainfuck'
-
   function fillArray(_length: number, _startBy: number = 0): null[] {
     const Result = []
 

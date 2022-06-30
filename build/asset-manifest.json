@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/brainfuck.org/static/css/main.f0d685eb.css",
+    "main.js": "/brainfuck.org/static/js/main.ac7b3b77.js",
+    "index.html": "/brainfuck.org/index.html",
+    "main.f0d685eb.css.map": "/brainfuck.org/static/css/main.f0d685eb.css.map",
+    "main.ac7b3b77.js.map": "/brainfuck.org/static/js/main.ac7b3b77.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f0d685eb.css",
+    "static/js/main.ac7b3b77.js"
+  ]
+}

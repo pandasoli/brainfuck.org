@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/brainfuck.org/static/css/main.f0d685eb.css",
-    "main.js": "/brainfuck.org/static/js/main.175e6638.js",
+    "main.js": "/brainfuck.org/static/js/main.e3489139.js",
     "index.html": "/brainfuck.org/index.html",
     "main.f0d685eb.css.map": "/brainfuck.org/static/css/main.f0d685eb.css.map",
-    "main.175e6638.js.map": "/brainfuck.org/static/js/main.175e6638.js.map"
+    "main.e3489139.js.map": "/brainfuck.org/static/js/main.e3489139.js.map"
   },
   "entrypoints": [
     "static/css/main.f0d685eb.css",
-    "static/js/main.175e6638.js"
+    "static/js/main.e3489139.js"
   ]
 }

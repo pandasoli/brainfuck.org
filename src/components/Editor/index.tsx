@@ -35,7 +35,7 @@ const Editor = (props: Props) => {
 
   useEffect(() => {
     props.SetCode(Code)
-  }, [ Code ])
+  }, [ Code, props ])
 
   function fillArray(_length: number, _startBy: number = 0): null[] {
     const Result = []

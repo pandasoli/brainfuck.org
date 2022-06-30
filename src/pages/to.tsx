@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button, Input, Label, FormGroup } from 'reactstrap'
 
 import FadeButton from '../components/FadeButton'
@@ -30,11 +30,7 @@ const To = () => {
 
   document.title += ' | To Brainfuck'
 
-  function startTimer() {
-    SetTimer(setInterval(() => interpreterNext(), Speed))
-  }
-
-  function interpreterNext(_step?: boolean) {
+  const interpreterNext= useCallback((_step?: boolean) => {
     const response = Interpreter.next()
     SetResult(response.value)
 
@@ -42,11 +38,16 @@ const To = () => {
       SetState('stopped')
     else if (_step)
       Interpreter.next()
-  }
+  }, [ Interpreter ])
 
-  function startInterpreter() {
+  const startTimer = useCallback(() => {
+    SetTimer(setInterval(() => interpreterNext(), Speed))
+  }, [ Speed, interpreterNext ])
+
+  const startInterpreter = useCallback(() => {
     SetInterpreter(ToBrainfuck(Text, PauseInterpreter))
-  }
+  }, [ PauseInterpreter, Text ])
+
 
   const $btnExecute_click = () => {
     startInterpreter()
@@ -99,7 +100,7 @@ const To = () => {
       interpreterNext(true)
     }
 
-  }, [ State ])
+  }, [ State, Timer, interpreterNext, startTimer ])
 
   return <>
     <Hero>

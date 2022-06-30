@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Button, Input, Label, FormGroup } from 'reactstrap'
 
 import FromBrainfuck from '../scripts/FromBrainfuck'
@@ -62,11 +62,7 @@ const From = () => {
     return Result
   }
 
-  function startTimer() {
-    SetTimer(setInterval(InterpreterNext, Speed))
-  }
-
-  function InterpreterNext(_step?: boolean) {
+  const InterpreterNext = useCallback((_step?: boolean) => {
     const response = Interpreter.next()
     SetResult(response.value)
 
@@ -95,14 +91,18 @@ const From = () => {
       SetState('stopped')
     else if (_step)
       Interpreter.next()
-  }
+  }, [ Code.code, Code.warnings, Interpreter ])
 
-  function startInterpreter(_step?: boolean) {
+  const startTimer = useCallback(() => {
+    SetTimer(setInterval(InterpreterNext, Speed))
+  }, [ InterpreterNext, Speed ])
+
+  const startInterpreter = useCallback((_step?: boolean) => {
     SetCode({ edited: false, code: Code.code, warnings: [] })
     SetInterpreter(
       FromBrainfuck(Code.code, _step ? true : PauseInterpreter, Warn, undefined, MaxMemory)
     )
-  }
+  }, [ Code.code, MaxMemory, PauseInterpreter, Warn ])
 
 
   const $btnStop_click = () => {
@@ -144,7 +144,7 @@ const From = () => {
       InterpreterNext(true)
     }
 
-  }, [ State, InterpreterNext, Timer ])
+  }, [ State, Timer, InterpreterNext, startTimer ])
 
   return <>
     <Hero>

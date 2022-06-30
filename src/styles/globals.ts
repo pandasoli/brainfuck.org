@@ -4,17 +4,17 @@ import { createGlobalStyle } from 'styled-components'
 export const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'FiraCode';
-    src: url('//fonts/FiraCode.ttf');
+    src: url('fonts/FiraCode.ttf');
   }
 
   @font-face {
     font-family: 'MavenPro';
-    src: url('//fonts/MavenPro.ttf');
+    src: url('fonts/MavenPro.ttf');
   }
 
   @font-face {
     font-family: 'Alpha centauri';
-    src: url('//fonts/Alphacentauri.ttf');
+    src: url('fonts/Alphacentauri.ttf');
   }
 
   * {

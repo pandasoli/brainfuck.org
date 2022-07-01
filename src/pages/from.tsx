@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Input, Label, FormGroup } from 'reactstrap'
 
 import FromBrainfuck from '../scripts/FromBrainfuck'
@@ -9,7 +9,7 @@ import Memory from '../components/Memory'
 import Editor from '../components/Editor'
 import Range from '../components/Range'
 
-import { Header, FooterCharTable, Footer, Main, ResultPanel, Hero, HeroBackground } from '../styles/from.styles'
+import { Header, FooterCharTable, Footer, Main, MemoryHeader, ResultPanel, Hero, HeroBackground } from '../styles/from.styles'
 
 type Result = {
   memory: number[]
@@ -40,15 +40,15 @@ const From = () => {
     warnings: []
   })
 
-  const [ Speed, SetSpeed ] = useState<number>(30)
-  const [ Result, SetResult ] = useState<Result>({} as Result)
-  const [ MaxMemory, SetMaxMemory ] = useState<number>()
   const [ PauseInterpreter, SetPauseInterpreter ] = useState(true)
+  const [ MaxMemory, SetMaxMemory ] = useState(0)
+  const [ Result, SetResult ] = useState({} as Result)
+  const [ Speed, SetSpeed ] = useState(30)
   const [ Warn, SetWarn ] = useState(true)
 
-  const [ State, SetState ] = useState('stopped')
-  const [ Interpreter, SetInterpreter ] = useState<Generator>({} as Generator)
-  const [ Timer, SetTimer ] = useState<NodeJS.Timeout>({} as NodeJS.Timeout)
+  const [ Interpreter, SetInterpreter ] = useState<Generator | null>(null)
+  const [ State, SetState ] = useState<'stopped' | 'executing' | 'stepped' | 'paused'>('stopped')
+  const [ Timer, SetTimer ] = useState({} as NodeJS.Timeout)
 
   function fillArray(_length: number, _startBy: number = 0): null[] {
     const Result = []
@@ -60,58 +60,57 @@ const From = () => {
     return Result
   }
 
-  const InterpreterNext = useCallback((_step?: boolean) => {
-    const response = Interpreter.next() as { value: Result, done: boolean }
-    SetResult(response.value)
+  function InterpreterNext() {
+    const response = Interpreter?.next() as { value: Result, done: boolean }
 
-    if (response?.value?.warnings?.length > 0)
+    if (response.value) {
+      SetResult(response.value)
       SetCode({
+        ...Code,
         edited: false,
-        code: Code.code,
-        warnings: response?.value?.warnings?.map(_warn => _warn.index)
+        warnings: response?.value?.warnings?.map($ => $.index)
       })
-
-    if (
-      response?.value?.warning &&
-      response?.value?.warning !== ''
-    ) {
-      SetCode({
-        edited: false,
-        code: Code.code,
-        warnings: [...Code.warnings, (response.value as Result).index]
-      })
-
-      SetState('paused')
     }
 
-    if (response.done)
+
+    if (response.done) {
       SetState('stopped')
-    else if (_step)
-      Interpreter.next()
-  }, [ Code.code, Code.warnings, Interpreter ])
+      SetInterpreter(null)
+      clearInterval(Timer)
+    }
+    else if (State === 'stepped')
+      Interpreter?.next()
+  }
 
-  const startTimer = useCallback(() => {
+  function startTimer() {
     SetTimer(setInterval(InterpreterNext, Speed))
-  }, [ InterpreterNext, Speed ])
+  }
 
-  const startInterpreter = useCallback((_step?: boolean) => {
-    SetCode({ edited: false, code: Code.code, warnings: [] })
+  function startInterpreter() {
+    SetCode({ ...Code, edited: false, warnings: [] })
+
     SetInterpreter(
-      FromBrainfuck(Code.code, _step ? true : PauseInterpreter, Warn, undefined, MaxMemory)
+      FromBrainfuck(
+        Code.code,
+        State === 'stepped' || PauseInterpreter,
+        Warn,
+        undefined,
+        MaxMemory
+      )
     )
-  }, [ Code.code, MaxMemory, PauseInterpreter, Warn ])
+  }
 
 
   const $btnStop_click = () => {
     SetState('stopped')
-    SetInterpreter({} as Generator)
-    SetResult({} as Result)
+    SetInterpreter(null)
     clearInterval(Timer)
+    SetResult({} as Result)
   }
 
   const $btnExecute_click = () => {
-    startInterpreter()
     SetState('executing')
+    startInterpreter()
   }
 
   const $btnPause_click = () => {
@@ -119,29 +118,38 @@ const From = () => {
     clearInterval(Timer)
   }
 
-  const $btnContinue_click = () =>
+  const $btnContinue_click = () => {
     SetState('executing')
+    startTimer()
+  }
 
   const $btnStep_click = () => {
     SetState('stepped')
 
-    if (Interpreter === null || Interpreter.next().done)
-      startInterpreter(true)
+    clearInterval(Timer)
+
+    if (Interpreter === null)
+      startInterpreter()
     else
       InterpreterNext()
   }
 
-  useEffect(() => {
-    if (State === 'paused' || State === 'stopped')
-      clearInterval(Timer as NodeJS.Timeout)
-    else if (State === 'executing')
-      startTimer()
-    else if (State === 'stepped') {
-      clearInterval(Timer as NodeJS.Timeout)
-      InterpreterNext(true)
-    }
+  const $btnReset_click = () => {
+    SetPauseInterpreter(true)
+    SetMaxMemory(0)
+    SetResult({} as Result)
+    SetSpeed(30)
+    SetWarn(true)
+  }
 
-  }, [ State, Timer, InterpreterNext, startTimer ])
+  useEffect(() => {
+    if (State === 'executing')
+      startTimer()
+
+    if (State === 'stepped')
+      InterpreterNext()
+
+  }, [ Interpreter ])
 
   return <>
     <Hero>
@@ -152,25 +160,26 @@ const From = () => {
       <div>
         {
           State === 'stopped' &&
-            <>
-              <Button className='success mini' onClick={ $btnExecute_click }>Execute</Button>
-              <Button className='success mini' onClick={ $btnStep_click }>Step</Button>
-            </>
+          <>
+            <Button className='success mini' onClick={ $btnExecute_click }>Execute</Button>
+            <Button className='success mini' onClick={ $btnStep_click }>Step</Button>
+            <Button className='mini' onClick={ $btnReset_click }>Reset</Button>
+          </>
         }
         {
           State === 'executing' &&
-            <>
-              <Button className='err mini' onClick={ $btnStop_click }>Stop</Button>
-              <Button className='err mini' onClick={ $btnPause_click }>Pause</Button>
-            </>
+          <>
+            <Button className='err mini' onClick={ $btnStop_click }>Stop</Button>
+            <Button className='err mini' onClick={ $btnPause_click }>Pause</Button>
+          </>
         }
         {
           (State === 'paused' || State === 'stepped') &&
-            <>
-              <Button className='err mini' onClick={ $btnStop_click }>Stop</Button>
-              <Button className='success mini' onClick={ $btnStep_click }>Step</Button>
-              <Button className='success mini' onClick={ $btnContinue_click }>Continue</Button>
-            </>
+          <>
+            <Button className='err mini' onClick={ $btnStop_click }>Stop</Button>
+            <Button className='success mini' onClick={ $btnStep_click }>Step</Button>
+            <Button className='success mini' onClick={ $btnContinue_click }>Continue</Button>
+          </>
         }
       </div>
 
@@ -215,10 +224,10 @@ const From = () => {
     </Header>
 
     <Main>
-      <header>
+      <MemoryHeader>
         <Memory items={Result?.memory || [ 0, 0, 0 ]} pointer={ Result?.pointer }/>
-        <p className='red'>{ Result ? Result.error : '' }</p>
-      </header>
+        <p>{ Result?.error ?? '' }</p>
+      </MemoryHeader>
 
       <Editor
         State={ State }
@@ -230,7 +239,7 @@ const From = () => {
       />
 
       {
-        Result?.result &&
+        Result.index > 0 &&
         <ResultPanel>
           <FadeButton text='JSON Response'>
             <CodeComponent language='json' code={ JSON.stringify(Result) } size='extended'/>

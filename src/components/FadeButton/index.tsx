@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react'
-import { Button } from 'reactstrap'
+import Button from '../Button.styles'
 
 import { Header, Main } from './index.styles'
 

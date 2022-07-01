@@ -42,9 +42,11 @@ export const GlobalStyle = createGlobalStyle`
 
     --primary-cl: #05090e;
     --primary-cl-light: #0b121c;
-    --secondary-cl: #d2de78;
 
+    --secondary-cl: #d2de78;
     --secondary-cl-rgb: 210, 222, 120;
+
+    --red-cl: #de5971;
 
     --box-shadow: 0px 0px 3px var(--secondary-cl);
 
@@ -73,8 +75,6 @@ export const GlobalStyle = createGlobalStyle`
     flex-direction: column;
 
     min-height: 100vh;
-
-    overflow: overlay;
 
     background-color: var(--primary-cl);
   }

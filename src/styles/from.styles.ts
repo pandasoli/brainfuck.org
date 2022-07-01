@@ -4,7 +4,7 @@ import styled from 'styled-components'
 export const Hero = styled.div`
   position: absolute;
 
-  width: 100vw;
+  width: 100%;
   height: 76vh;
 
   z-index: -1;
@@ -35,10 +35,11 @@ export const Header = styled.header`
   @media (min-width: 992px) { max-width: 992px; } // --md-size
   @media (min-width: 1200px) { max-width: 1200px; } // --lg-size
 
-  padding-bottom: 10px;
+  padding: 0 20px 10px 20px;
 
   & > div {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
 
     .range {
@@ -84,6 +85,16 @@ export const Main = styled.main`
   align-items: center;
 
   width: 100%;
+`
+
+export const MemoryHeader = styled.header`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  p {
+    color: var(--red-cl);
+  }
 `
 
 export const ResultPanel = styled.div`

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import ReactSimpleCodeEditor from 'react-simple-code-editor'
 import { Button } from 'reactstrap'
 
@@ -27,16 +26,6 @@ type Props = {
 
 
 const Editor = (props: Props) => {
-  const [ Code, SetCode ] = useState<CodeType>({
-    edited: false,
-    code: '++++++++\n[\n  > ++++++++++\n  < -\n]\n> . P 80\n\n+++++++++++++++++ . a 97\n+++++++++++++ . n 110\n---------- . d 100\n--- . a 97\n!',
-    warnings: []
-  })
-
-  useEffect(() => {
-    props.SetCode(Code)
-  }, [ Code, props ])
-
   function fillArray(_length: number, _startBy: number = 0): null[] {
     const Result = []
 
@@ -51,7 +40,7 @@ const Editor = (props: Props) => {
       <LineNumbers>
         {
           fillArray(
-            Code.code
+            props.Code.code
             .split('')
             .filter($ => $ === '\n').length
           )
@@ -63,13 +52,13 @@ const Editor = (props: Props) => {
 
       <ReactSimpleCodeEditor
         className='editorType'
-        value={ Code.code }
-        onValueChange={ _code => SetCode({ edited: true, code: _code, warnings: [] }) }
+        value={ props.Code.code }
+        onValueChange={ _code => props.SetCode({ edited: true, code: _code, warnings: [] }) }
         highlight={
           _code => <BFHighlight
             code={ _code }
-            focusAt={ !Code.edited ? props.Result?.index : -1 }
-            warnings={ Code.warnings }
+            focusAt={ !props.Code.edited ? props.Result?.index : -1 }
+            warnings={ props.Code.warnings }
             error={ props.Result?.error !== '' }
           />
         }
@@ -80,7 +69,7 @@ const Editor = (props: Props) => {
         props.State !== 'stopped' &&
           <Background>
             <div>
-              <BFHighlight code={ props.Result.char }/>
+              <BFHighlight code={ props.Result?.char }/>
             </div>
 
             {

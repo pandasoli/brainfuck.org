@@ -30,6 +30,7 @@ export const LineNumbers = styled.ol`
   padding: 4px;
 
   list-style: none;
+  user-select: none;
 
   border-radius: 4px;
   background-color: var(--primary-cl-light);

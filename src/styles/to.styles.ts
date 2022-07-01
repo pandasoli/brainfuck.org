@@ -1,10 +1,11 @@
 import styled from 'styled-components'
+import Input from '../components/Input.styles'
 
 
 export const Hero = styled.div`
   position: absolute;
 
-  width: 100vw;
+  width: 100%;
   height: 68vh;
 
   z-index: -1;
@@ -105,21 +106,6 @@ export const Editor = styled.div`
     font-family: 'FiraCode';
     font-size: .8rem;
   }
-
-  input {
-    position: relative;
-
-    height: 100%;
-    width: 100%;
-    min-height: 400px;
-
-    margin: 0px;
-    padding: 0px;
-
-    text-align: center;
-
-    border: 0px;
-  }
 `
 
 export const EditorBackground = styled.div`
@@ -153,4 +139,19 @@ export const ResultPanel = styled.div`
   .mini {
     margin: 6px 20px;
   }
+`
+
+export const CodeInput = styled(Input)`
+  position: relative;
+
+  height: 100%;
+  width: 100%;
+  min-height: 400px;
+
+  margin: 6px;
+  padding: 0px;
+
+  text-align: center;
+
+  border: 0px;
 `

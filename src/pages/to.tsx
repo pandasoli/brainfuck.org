@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { Label, FormGroup } from 'reactstrap'
 
 import FadeButton from '../components/FadeButton'
@@ -8,7 +8,7 @@ import Input from '../components/Input.styles'
 import Range from '../components/Range'
 import Code from '../components/Code'
 
-import { Header, Editor, Main, EditorBackground, ResultPanel, Hero, HeroBackground } from '../styles/to.styles'
+import { Header, Editor, Main, EditorBackground, ResultPanel, Hero, HeroBackground, CodeInput } from '../styles/to.styles'
 
 type Result = {
   ascii: number
@@ -21,44 +21,52 @@ type Result = {
 
 
 const To = () => {
-  const [ Text, SetText ] = useState('Panda')
-  const [ Result, SetResult ] = useState<Result>({} as Result)
-  const [ Speed, SetSpeed ] = useState<number>(30)
   const [ PauseInterpreter, SetPauseInterpreter ] = useState(true)
+  const [ Result, SetResult ] = useState({} as Result)
+  const [ Speed, SetSpeed ] = useState(30)
+  const [ Text, SetText ] = useState('Panda')
 
+  const [ Interpreter, SetInterpreter ] = useState<Generator | null>({} as Generator)
   const [ State, SetState ] = useState('stopped')
-  const [ Interpreter, SetInterpreter ] = useState<Generator>({} as Generator)
-  const [ Timer, SetTimer ] = useState<NodeJS.Timeout>({} as NodeJS.Timeout)
+  const [ Timer, SetTimer ] = useState({} as NodeJS.Timeout)
 
-  const interpreterNext= useCallback((_step?: boolean) => {
-    const response = Interpreter.next()
-    SetResult(response.value)
+  function interpreterNext() {
+    const response = Interpreter?.next() as { value: Result, done: boolean }
 
-    if (response.done)
+    if (response.value)
+      SetResult(response.value)
+
+    if (response.done) {
       SetState('stopped')
-    else if (_step)
-      Interpreter.next()
-  }, [ Interpreter ])
+      clearInterval(Timer)
+      SetInterpreter(null)
+    }
+    else if (State === 'stepped')
+      Interpreter?.next()
+  }
 
-  const startTimer = useCallback(() => {
-    SetTimer(setInterval(() => interpreterNext(), Speed))
-  }, [ Speed, interpreterNext ])
+  function startTimer() {
+    SetTimer(setInterval(interpreterNext, Speed))
+  }
 
-  const startInterpreter = useCallback(() => {
-    SetInterpreter(ToBrainfuck(Text, PauseInterpreter))
-  }, [ PauseInterpreter, Text ])
+  function startInterpreter() {
+    SetInterpreter(
+      ToBrainfuck(Text, PauseInterpreter)
+    )
+  }
 
 
   const $btnExecute_click = () => {
-    startInterpreter()
     SetState('executing')
+    startInterpreter()
+    startTimer()
   }
 
   const $btnStop_click = () => {
     SetState('stopped')
-    SetInterpreter({} as Generator)
-    SetResult({} as Result)
+    SetInterpreter(null)
     clearInterval(Timer)
+    SetResult({} as Result)
   }
 
   const $btnPause_click = () => {
@@ -68,16 +76,18 @@ const To = () => {
 
   const $btnContinue_click = () => {
     SetState('executing')
+    startTimer()
   }
 
   const $btnStep_click = () => {
-    if (Interpreter === null || State !== 'stepped') {
+    SetState('stepped')
+
+    clearInterval(Timer)
+
+    if (Interpreter === null)
       startInterpreter()
-      SetState('stepped')
-    }
-    else {
-      interpreterNext(true)
-    }
+    else
+      interpreterNext()
   }
 
   const $btnReset_click = () => {
@@ -91,16 +101,13 @@ const To = () => {
   }
 
   useEffect(() => {
-    if (State === 'paused' || State === 'stopped')
-      clearInterval(Timer)
-    else if (State === 'executing')
+    if (State === 'executing')
       startTimer()
-    else if (State === 'stepped') {
-      clearInterval(Timer)
-      interpreterNext(true)
-    }
 
-  }, [ State, Timer, interpreterNext, startTimer ])
+    if (State === 'stepped')
+      interpreterNext()
+
+  }, [ Interpreter ])
 
   return <>
     <Hero>
@@ -164,7 +171,7 @@ const To = () => {
       </header>
 
       <Editor>
-        <Input
+        <CodeInput
           type='text'
           defaultValue={ Text }
           onChange={ ($: any) => SetText($.currentTarget.value) }

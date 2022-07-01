@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Button, Input, Label, FormGroup } from 'reactstrap'
+import { Label, FormGroup } from 'reactstrap'
 
 import FromBrainfuck from '../scripts/FromBrainfuck'
 import FadeButton from '../components/FadeButton'
+import Button from '../components/Button.styles'
 import FadeTitle from '../components/FadeTitle'
 import CodeComponent from '../components/Code'
+import Input from '../components/Input.styles'
 import Memory from '../components/Memory'
 import Editor from '../components/Editor'
 import Range from '../components/Range'
@@ -199,7 +201,7 @@ const From = () => {
             type='number'
             placeholder='auto'
             min={ 0 }
-            onChange={ _event => SetMaxMemory(Number(_event.currentTarget.value)) }
+            onChange={ ($: any) => SetMaxMemory(Number($.currentTarget.value)) }
           />
         </div>
 
@@ -207,7 +209,7 @@ const From = () => {
           <Input
             type='checkbox'
             defaultChecked={ PauseInterpreter }
-            onChange={ _event => SetPauseInterpreter(_event.currentTarget.checked) }
+            onChange={ ($: any) => SetPauseInterpreter($.currentTarget.checked) }
           />
           <Label check>Pause</Label>
         </FormGroup>
@@ -216,7 +218,7 @@ const From = () => {
           <Input
             type='checkbox'
             defaultChecked={ Warn }
-            onChange={ _event => SetWarn(_event.currentTarget.checked) }
+            onChange={ ($: any) => SetWarn($.currentTarget.checked) }
           />
           <Label check>Warn</Label>
         </FormGroup>

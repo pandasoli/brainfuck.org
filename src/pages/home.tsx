@@ -1,13 +1,11 @@
-import { Button } from 'reactstrap'
 
-import {
-  Hero, HeroBackground, HeroHeader, HeroMain, HeroTitle,
-  Main
-} from '../styles/home.styles'
-import Memory from '../components/Memory'
-import P from '../components/Paragraph.styles'
-import Code from '../components/Code'
 import Table, { Cel as TableCel, Item as TableItem } from '../components/Table'
+import Button from '../components/Button.styles'
+import P from '../components/Paragraph.styles'
+import Memory from '../components/Memory'
+import Code from '../components/Code'
+
+import { Hero, HeroBackground, HeroHeader, HeroMain, HeroTitle, Main } from '../styles/home.styles'
 
 
 const Home = () => {

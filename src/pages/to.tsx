@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Button, Input, Label, FormGroup } from 'reactstrap'
+import { Label, FormGroup } from 'reactstrap'
 
 import FadeButton from '../components/FadeButton'
 import ToBrainfuck from '../scripts/ToBrainfuck'
+import Button from '../components/Button.styles'
+import Input from '../components/Input.styles'
 import Range from '../components/Range'
 import Code from '../components/Code'
 
@@ -149,7 +151,7 @@ const To = () => {
           <Input
             type='checkbox'
             defaultChecked={ PauseInterpreter }
-            onChange={ _event => SetPauseInterpreter(_event.currentTarget.checked) }
+            onChange={ ($: any) => SetPauseInterpreter($.currentTarget.checked) }
           />
           <Label check>Pause</Label>
         </FormGroup>
@@ -165,7 +167,7 @@ const To = () => {
         <Input
           type='text'
           defaultValue={ Text }
-          onChange={ _event => SetText(_event.currentTarget.value) }
+          onChange={ ($: any) => SetText($.currentTarget.value) }
         />
 
         {

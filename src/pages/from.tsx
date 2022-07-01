@@ -61,20 +61,19 @@ const From = () => {
   }
 
   const InterpreterNext = useCallback((_step?: boolean) => {
-    const response = Interpreter.next()
+    const response = Interpreter.next() as { value: Result, done: boolean }
     SetResult(response.value)
 
-    if ((response.value as Result)?.warnings?.length > 0) {
+    if (response?.value?.warnings?.length > 0)
       SetCode({
         edited: false,
         code: Code.code,
-        warnings: (response.value as Result).warnings.map(_warn => _warn.index)
+        warnings: response?.value?.warnings?.map(_warn => _warn.index)
       })
-    }
 
     if (
-      (response.value as Result).warning &&
-      (response.value as Result).warning !== ''
+      response?.value?.warning &&
+      response?.value?.warning !== ''
     ) {
       SetCode({
         edited: false,

@@ -29,6 +29,7 @@ export const Header = styled.header`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: center;
 
   width: 100%;
   @media (min-width: 768px) { max-width: 768px; } // --sm-size
@@ -41,6 +42,7 @@ export const Header = styled.header`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
 
     .range {
       margin-top: 40px;

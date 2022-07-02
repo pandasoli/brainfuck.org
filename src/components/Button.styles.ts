@@ -3,12 +3,7 @@ import { Button } from 'reactstrap'
 
 
 export default styled(Button)`
-  &.btn-outline-primary,
-  &.btn-primary {
-    --font-cl: var(--primary-cl);
-    --bg-cl: var(--primary-font-cl);
-    --border-cl: var(--primary-font-cl);
-
+  &.btn {
     display: inline-block;
 
     margin: 4px;
@@ -23,47 +18,80 @@ export default styled(Button)`
     text-align: center;
     text-decoration: none;
     user-select: none;
-    color: var(--font-cl);
+    color: var(--primary-cl);
 
-    background-color: var(--bg-cl);
+    background-color: var(--primary-font-cl);
     border-radius: 25px;
     transition: opacity .6s, background-color .6s, color .2s;
-    border: 1px solid var(--border-cl);
-  }
-
-  
-  &.btn-outline-primary {
-    --font-cl: var(--primary-font-cl);
-    --bg-cl: transparent;
+    border: 1px solid var(--primary-font-cl);
   }
 
   &.mini {
     padding: 5px 40px;
   }
 
-  &.success {
-    --bg-cl: var(--bs-teal);
-    --border-cl: var(--bs-teal);
+  &.btn-outline-primary {
+    color: var(--primary-font-cl);
+    background-color: transparent;
+  }
+
+  &.btn-success {
+    color: var(--primary-cl);
+    background-color: var(--green-cl);
+    border-color: var(--green-cl);
+  }
+
+  &.btn-error {
+    color: var(--primary-cl);
+    background-color: var(--red-cl);
+    border-color: var(--red-cl);
+  }
+
+  &.btn-outline-success {
+    color: var(--green-cl);
+    background-color: transparent;
+    border-color: var(--green-cl);
   }
 
   &:hover:not([disabled]),
   &:focus:not([disabled]) {
     &.btn-primary {
-      color: var(--bg-cl);
+      color: var(--primary-font-cl);
       background-color: transparent;
     }
 
     &.btn-outline-primary {
       color: var(--primary-cl);
-      background-color: var(--font-cl);
+      background-color: var(--primary-font-cl);
+    }
+
+    &.btn-success {
+      color: var(--green-cl);
+      background-color: transparent;
+    }
+
+    &.btn-error {
+      color: var(--red-cl);
+      background-color: transparent;
+    }
+
+    &.btn-outline-success {
+      color: var(--primary-cl);
+      background-color: var(--green-cl);
     }
   }
 
   &:focus:not([disabled]) {
-    box-shadow: 0 0 0 .25rem #e7f0eaad;
-    
-    &.success {
-      box-shadow: 0 0 0 .25rem #20c997ad;
+    box-shadow: 0 0 0 .25rem rgba(var(--primary-font-cl-rgb), .68);
+
+    &.btn-error,
+    &.btn-outline-error {
+      box-shadow: 0 0 0 .25rem rgba(var(--red-cl-rgb), .68);
+    }
+
+    &.btn-success,
+    &.btn-outline-success {
+      box-shadow: 0 0 0 .25rem rgba(var(--green-cl-rgb), .68);
     }
   }
 

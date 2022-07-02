@@ -17,7 +17,15 @@ export default styled.ol`
     width: 40px;
 
     border: 1px solid var(--primary-cl-light);
-    box-shadow: 0px 0px 3px var(--primary-font-cl);
+    box-shadow: 0 0 3px var(--primary-font-cl);
+    
+    &.empty {
+      opacity: .6;
+    }
+
+    &.error {
+      box-shadow: 0 0 3px var(--red-cl);
+    }
   }
 `
 

@@ -2,11 +2,11 @@ import { useState } from 'react'
 
 import Input from '../components/Input.styles'
 
-import { FooterCharTable, Convertions } from '../styles/ascii.styles'
+import { FooterCharTable, Convertions, ResultLabel } from '../styles/ascii.styles'
 
 
 const ASCII = () => {
-  const [ ConvertionsResult, SetConvertionsResult ] = useState({ to: 0, from: '' })
+  const [ ConvertionsResult, SetConvertionsResult ] = useState({ to: 80, from: 'P' })
 
   function fillArray(length: number, startBy: number = 0) {
     const res = []
@@ -23,12 +23,12 @@ const ASCII = () => {
     if (element.name === 'to')
       SetConvertionsResult({
         ...ConvertionsResult,
-        to: element.value.charCodeAt(0)
+        to: element.value === '' ? 80 : element.value.charCodeAt(0)
       })
     else if (element.name === 'from')
       SetConvertionsResult({
         ...ConvertionsResult,
-        from: String.fromCharCode(element.value)
+        from: element.value === '' ? 'P' : String.fromCharCode(element.value)
       })
   }
 
@@ -43,12 +43,12 @@ const ASCII = () => {
         <Input
           name='from'
           type='number'
-          placeholder='0'
+          placeholder='80'
           min={ 0 }
           max={ 255 }
           onChange={ $txbConvertions_change }
         />
-        <label>Result: { ConvertionsResult.from }</label>
+        <ResultLabel>Result: { ConvertionsResult.from }</ResultLabel>
       </div>
 
       <div>
@@ -60,7 +60,7 @@ const ASCII = () => {
           maxLength={ 1 }
           onChange={ $txbConvertions_change }
         />
-        <label>Result: { ConvertionsResult.to }</label>
+        <ResultLabel>Result: { ConvertionsResult.to }</ResultLabel>
       </div>
     </Convertions>
 
@@ -69,10 +69,10 @@ const ASCII = () => {
 
     <FooterCharTable>
       {
-        fillArray(255, 1).map(($, _) =>
+        fillArray(255).map(($, _) =>
           <li key={ _ }>
-            <span>{ _ + 1 }</span>
-            <label>{ `: ${String.fromCharCode(_ + 1)}` }</label>
+            <span>{ _ }</span>
+            <label>{ `: ${String.fromCharCode(_)}` }</label>
           </li>
         )
       }

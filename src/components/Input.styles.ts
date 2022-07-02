@@ -15,6 +15,14 @@ export default styled(Input)`
     }
   }
 
+  &[type='number'] {
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none !important;
+      margin: 0 !important;
+    }
+  }
+
   &[type='checkbox'] {
     border-color: var(--primary-cl-light);
     background-color: var(--primary-cl-light);

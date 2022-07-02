@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 export default styled.label`
   display: block;
+  color: #c0caf5;
 `
 
 export const Symbol = styled.span`color: #a9b1d6;`

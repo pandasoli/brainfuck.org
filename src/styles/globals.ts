@@ -39,6 +39,7 @@ export const GlobalStyle = createGlobalStyle`
     background-color: transparent;
 
     --primary-font-cl: #e7f0ea;
+    --primary-font-cl-rgb: 231, 240, 234;
 
     --primary-cl: #05090e;
     --primary-cl-light: #0b121c;
@@ -47,6 +48,10 @@ export const GlobalStyle = createGlobalStyle`
     --secondary-cl-rgb: 210, 222, 120;
 
     --red-cl: #de5971;
+    --red-cl-rgb: 222, 89, 113;
+
+    --green-cl: #20c997;
+    --green-cl-rgb: 32, 201, 151;
 
     --box-shadow: 0px 0px 3px var(--secondary-cl);
 
@@ -116,15 +121,17 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ::-webkit-scrollbar {
-    height: 6px;
-    width: 6px;
+    width: 14px;
+    height: 18px;
 
     background-color: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    border-radius: 6px;
+    border-radius: 7px;
     background-color: var(--secondary-cl);
+    border: 4px solid transparent;
+    background-clip: padding-box;
   }
 
   span {

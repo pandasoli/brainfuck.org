@@ -133,24 +133,24 @@ const To = () => {
           {
             (State === 'stopped') &&
             <>
-              <Button color='primary' className='success mini' onClick={ $btnExecute_click }>Execute</Button>
-              <Button color='primary' className='success mini' onClick={ $btnStep_click }>Step</Button>
+              <Button color='success' className='mini' onClick={ $btnExecute_click }>Execute</Button>
+              <Button color='success' className='mini' onClick={ $btnStep_click }>Step</Button>
               <Button color='primary' outline className='mini' onClick={ $btnReset_click }>Reset</Button>
             </>
           }
           {
             (State === 'executing') &&
             <>
-              <Button color='primary' className='err mini' onClick={ $btnStop_click }>Stop</Button>
-              <Button color='primary' outline className='err mini' onClick={ $btnPause_click }>Pause</Button>
+              <Button color='error' className='mini' onClick={ $btnStop_click }>Stop</Button>
+              <Button color='error' outline className='mini' onClick={ $btnPause_click }>Pause</Button>
             </>
           }
           {
             (State === 'paused' || State === 'stepped') &&
             <>
-              <Button color='primary' className='err mini' onClick={ $btnStop_click }>Stop</Button>
-              <Button color='primary' className='success mini' onClick={ $btnStep_click }>Step</Button>
-              <Button color='primary' outline className='success mini' onClick={ $btnContinue_click }>Continue</Button>
+              <Button color='error' className='mini' onClick={ $btnStop_click }>Stop</Button>
+              <Button color='success' className='mini' onClick={ $btnStep_click }>Step</Button>
+              <Button color='success' outline className='mini' onClick={ $btnContinue_click }>Continue</Button>
             </>
           }
         </div>

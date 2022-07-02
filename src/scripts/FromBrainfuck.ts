@@ -16,7 +16,8 @@ function * From(_code?: string, _pause?: boolean, _warn?: boolean, _getChar?: ()
 		getChar: _getChar || ( () => prompt('enter a char:') || '' ),
 		maxMem: Number(_maxMem) > 0 ? Number(_maxMem)  : 'auto'
 	}
-	const memory = props.maxMem === 'auto' ? [0] : Array(props.maxMem).fill('').map(_item => 0)
+	// const memory = props.maxMem === 'auto' ? [0] : Array(props.maxMem).fill('').map(_item => 0)
+	const memory = [0]
 	const acceptedChars = '+-<>.,[]!'
 	const loops = []
 	const warnings = []
@@ -71,6 +72,7 @@ function * From(_code?: string, _pause?: boolean, _warn?: boolean, _getChar?: ()
 							memory.push(0)
 						}
 						else {
+							memory.push(0)
 							resToReturn.error = `Error: memory cannot pass '${props.maxMem}' arrays.`
 							return resToReturn
 						}

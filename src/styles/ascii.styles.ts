@@ -29,3 +29,7 @@ export const Convertions = styled.section`
 
   padding-bottom: 50px;
 `
+
+export const ResultLabel = styled.label`
+  margin-top: 10px;
+`

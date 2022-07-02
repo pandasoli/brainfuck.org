@@ -44,7 +44,7 @@ const From = () => {
   })
 
   const [ PauseInterpreter, SetPauseInterpreter ] = useState(true)
-  const [ MaxMemory, SetMaxMemory ] = useState(0)
+  const [ MaxMemory, SetMaxMemory ] = useState<number | null>(null)
   const [ Result, SetResult ] = useState({} as Result)
   const [ Speed, SetSpeed ] = useState(30)
   const [ Warn, SetWarn ] = useState(true)
@@ -53,14 +53,13 @@ const From = () => {
   const [ State, SetState ] = useState<'stopped' | 'executing' | 'stepped' | 'paused'>('stopped')
   const [ Timer, SetTimer ] = useState({} as NodeJS.Timeout)
 
-  function fillArray(_length: number, _startBy: number = 0): null[] {
-    const Result = []
+  function fillArray(length: number, startBy: number = 0) {
+    const res = []
 
-    for (let x = _startBy; x <= _length; x++) {
-      Result.push(null)
-    }
+    for (let x = startBy; x <= length; x++)
+      res.push(null)
 
-    return Result
+    return res
   }
 
   function interpreterNext() {
@@ -74,7 +73,6 @@ const From = () => {
         warnings: response?.value?.warnings?.map($ => $.index)
       })
     }
-
 
     if (response.done) {
       SetState('stopped')
@@ -98,7 +96,7 @@ const From = () => {
         State === 'stepped' || PauseInterpreter,
         Warn,
         undefined,
-        MaxMemory
+        MaxMemory || undefined
       )
     )
   }
@@ -139,7 +137,7 @@ const From = () => {
 
   const $btnReset_click = () => {
     SetPauseInterpreter(true)
-    SetMaxMemory(0)
+    SetMaxMemory(null)
     SetResult({} as Result)
     SetSpeed(30)
     SetWarn(true)
@@ -175,24 +173,24 @@ const From = () => {
         {
           State === 'stopped' &&
           <>
-            <Button color='primary' className='success mini' onClick={ $btnExecute_click }>Execute</Button>
-            <Button color='primary' className='success mini' onClick={ $btnStep_click }>Step</Button>
+            <Button color='success' className='mini' onClick={ $btnExecute_click }>Execute</Button>
+            <Button color='success' className='mini' onClick={ $btnStep_click }>Step</Button>
             <Button color='primary' outline className='mini' onClick={ $btnReset_click }>Reset</Button>
           </>
         }
         {
           State === 'executing' &&
           <>
-            <Button color='primary' className='err mini' onClick={ $btnStop_click }>Stop</Button>
-            <Button color='primary' outline className='err mini' onClick={ $btnPause_click }>Pause</Button>
+            <Button color='error' className='mini' onClick={ $btnStop_click }>Stop</Button>
+            <Button color='error' outline className='mini' onClick={ $btnPause_click }>Pause</Button>
           </>
         }
         {
           (State === 'paused' || State === 'stepped') &&
           <>
-            <Button color='primary' className='err mini' onClick={ $btnStop_click }>Stop</Button>
-            <Button color='primary' className='success mini' onClick={ $btnStep_click }>Step</Button>
-            <Button color='primary' outline className='success mini' onClick={ $btnContinue_click }>Continue</Button>
+            <Button color='error' className='mini' onClick={ $btnStop_click }>Stop</Button>
+            <Button color='success' className='mini' onClick={ $btnStep_click }>Step</Button>
+            <Button color='success' outline className='mini' onClick={ $btnContinue_click }>Continue</Button>
           </>
         }
       </div>
@@ -213,6 +211,7 @@ const From = () => {
             type='number'
             placeholder='auto'
             min={ 0 }
+            value={ MaxMemory || '' }
             onChange={ ($: any) => SetMaxMemory(Number($.currentTarget.value)) }
           />
         </div>
@@ -239,7 +238,7 @@ const From = () => {
 
     <Main>
       <MemoryHeader>
-        <Memory items={Result?.memory || [ 0, 0, 0 ]} pointer={ Result?.pointer }/>
+        <Memory items={Result?.memory || [ 0, 0, 0 ]} max={ MaxMemory || undefined } pointer={ Result?.pointer }/>
         <p>{ Result?.error ?? '' }</p>
       </MemoryHeader>
 

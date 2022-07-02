@@ -53,7 +53,7 @@ export const Background = styled.div`
   background-color: rgba(0, 0, 0, .3);
 
   span {
-    font-size: 2rem;
+    font-size: 2rem !important;
   }
 `
 

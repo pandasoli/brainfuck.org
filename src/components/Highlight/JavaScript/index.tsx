@@ -7,12 +7,12 @@ type Props = {
 
 const JavaScript = (props: Props) => {
   const colors = {
-    symbols: '()[]{}:;,=',
+    symbols: '()[]{}:;,',
     strings: `\`'"`,
     stringIgnore: '\\',
     putSepareted: '\t ',
     numbers: '0123456789',
-    mathChars: '+-*/?<>.',
+    mathChars: '+-*/?<>.=',
     commands: [ 'for', 'let' ],
     classes: [ 'String' ]
   }

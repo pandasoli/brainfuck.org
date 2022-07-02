@@ -73,13 +73,16 @@ const Home = () => {
       </P>
 
       <P>One example is:</P>
-      <BlockCode { ...CodeProps('++++++\n[\n\t> ++++++++++\n\t< -\n]\n> .') }/>
+      <BlockCode { ...CodeProps('++++++\n[\n\t> ++++++++++\n\t< -\n]\n> +++++ .') }/>
 
       <P>The same code in JavaScript is:</P>
-      <BlockCode { ...CodeProps('for (let x = 0; x < 6; x++) {\n\tmemory[pointer] += 10;\n}\nconsole.log( String.fromCharCode(memory[pointer]) )') } language='javascript'/>
+      <BlockCode { ...CodeProps('for (let x = 0; x < 6; x++) {\n\tmemory[pointer] += 10;\n}\nmemory[pointer] += 5;\nconsole.log( String.fromCharCode(memory[pointer]) )') } language='javascript'/>
 
       <P>And the memory will be:</P>
-      <Memory items={[ 0, 60 ]} pointer={ 0 }/>
+      <Memory items={[ 0, 60 ]} pointer={ 1 }/>
+
+      <P>And the output:</P>
+      <BlockCode code='A'/>
 
       <Button
         onClick={ () => nookies.set(null, 'from-code', '') }

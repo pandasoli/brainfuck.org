@@ -1,11 +1,13 @@
 import styled from 'styled-components'
+import PC from '../components/Paragraph.styles'
+
 
 export const Hero = styled.section`
   position: relative;
   display: flex;
   flex-direction: column;
 
-  width: 100vw;
+  width: 100%;
   height: 97vh;
 
   background-image: url('/images/background.jpg');
@@ -61,4 +63,8 @@ export const Main = styled.section`
   align-items: center;
 
   padding: 20px 20px 0px 20px;
+`
+
+export const P = styled(PC)`
+  max-width: 768px;
 `

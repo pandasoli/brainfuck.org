@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Label, FormGroup } from 'reactstrap'
+import nookies from 'nookies'
 
 import FromBrainfuck from '../scripts/FromBrainfuck'
 import FadeButton from '../components/FadeButton'
 import Button from '../components/Button.styles'
 import FadeTitle from '../components/FadeTitle'
-import CodeComponent from '../components/Code'
+import CodeComponent from '../components/Code/block'
 import Input from '../components/Input.styles'
 import Memory from '../components/Memory'
 import Editor from '../components/Editor'
@@ -62,7 +63,7 @@ const From = () => {
     return Result
   }
 
-  function InterpreterNext() {
+  function interpreterNext() {
     const response = Interpreter?.next() as { value: Result, done: boolean }
 
     if (response.value) {
@@ -85,7 +86,7 @@ const From = () => {
   }
 
   function startTimer() {
-    SetTimer(setInterval(InterpreterNext, Speed))
+    SetTimer(setInterval(interpreterNext, Speed))
   }
 
   function startInterpreter() {
@@ -111,8 +112,8 @@ const From = () => {
   }
 
   const $btnExecute_click = () => {
-    SetState('executing')
     startInterpreter()
+    SetState('executing')
   }
 
   const $btnPause_click = () => {
@@ -126,14 +127,14 @@ const From = () => {
   }
 
   const $btnStep_click = () => {
-    SetState('stepped')
-
     clearInterval(Timer)
 
     if (Interpreter === null)
       startInterpreter()
     else
-      InterpreterNext()
+      interpreterNext()
+
+    SetState('stepped')
   }
 
   const $btnReset_click = () => {
@@ -145,13 +146,24 @@ const From = () => {
   }
 
   useEffect(() => {
+    const CookieCode = nookies.get()['from-code']
+    if (CookieCode) {
+      SetCode({ ...Code, code: CookieCode })
+      nookies.destroy(null, 'from-code')
+    }
+
+  }, [])
+
+  useEffect(() => {
     if (State === 'executing')
       startTimer()
 
     if (State === 'stepped')
-      InterpreterNext()
+      interpreterNext()
 
-  }, [ Interpreter ])
+  }, [ State ])
+
+  document.title += ' | From'
 
   return <>
     <Hero>
@@ -163,24 +175,24 @@ const From = () => {
         {
           State === 'stopped' &&
           <>
-            <Button className='success mini' onClick={ $btnExecute_click }>Execute</Button>
-            <Button className='success mini' onClick={ $btnStep_click }>Step</Button>
-            <Button className='mini' onClick={ $btnReset_click }>Reset</Button>
+            <Button color='primary' className='success mini' onClick={ $btnExecute_click }>Execute</Button>
+            <Button color='primary' className='success mini' onClick={ $btnStep_click }>Step</Button>
+            <Button color='primary' outline className='mini' onClick={ $btnReset_click }>Reset</Button>
           </>
         }
         {
           State === 'executing' &&
           <>
-            <Button className='err mini' onClick={ $btnStop_click }>Stop</Button>
-            <Button className='err mini' onClick={ $btnPause_click }>Pause</Button>
+            <Button color='primary' className='err mini' onClick={ $btnStop_click }>Stop</Button>
+            <Button color='primary' outline className='err mini' onClick={ $btnPause_click }>Pause</Button>
           </>
         }
         {
           (State === 'paused' || State === 'stepped') &&
           <>
-            <Button className='err mini' onClick={ $btnStop_click }>Stop</Button>
-            <Button className='success mini' onClick={ $btnStep_click }>Step</Button>
-            <Button className='success mini' onClick={ $btnContinue_click }>Continue</Button>
+            <Button color='primary' className='err mini' onClick={ $btnStop_click }>Stop</Button>
+            <Button color='primary' className='success mini' onClick={ $btnStep_click }>Step</Button>
+            <Button color='primary' outline className='success mini' onClick={ $btnContinue_click }>Continue</Button>
           </>
         }
       </div>
@@ -244,11 +256,11 @@ const From = () => {
         Result.index > 0 &&
         <ResultPanel>
           <FadeButton text='JSON Response'>
-            <CodeComponent language='json' code={ JSON.stringify(Result) } size='extended'/>
+            <CodeComponent language='json' code={ JSON.stringify(Result) }/>
           </FadeButton>
 
           <label>Result: { Result ? Result.result : '' }</label>
-          <Button onClick={ () => navigator.clipboard.writeText(Result?.result) } className='mini'>Copy</Button>
+          <Button onClick={ () => navigator.clipboard.writeText(Result?.result) } color='primary' outline className='mini'>Copy</Button>
         </ResultPanel>
       }
     </Main>

@@ -93,6 +93,23 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  code {
+    display: block;
+
+    margin: 0 4px;
+    padding: 4px;
+
+    text-align: left;
+
+    border-radius: 4px;
+    background-color: var(--primary-cl-light);
+
+    * {
+      font-family: 'FiraCode';
+      font-size: .8rem;
+    }
+  }
+
   ::selection {
     color: var(--primary-cl);
     background-color: var(--secondary-cl);

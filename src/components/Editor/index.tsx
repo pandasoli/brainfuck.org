@@ -1,7 +1,7 @@
 import ReactSimpleCodeEditor from 'react-simple-code-editor'
 import { Button } from 'reactstrap'
 
-import BFHighlight from '../BFHighlight'
+import BFHighlight from '../Highlight/Brainfuck'
 import Container, { LineNumbers, Background, DivWarning } from './index.styles'
 
 type CodeType = {
@@ -69,7 +69,7 @@ const Editor = (props: Props) => {
         props.State !== 'stopped' &&
           <Background>
             <div>
-              <BFHighlight code={ props.Result?.char }/>
+              <BFHighlight code={ props.Result.char || '' }/>
             </div>
 
             {

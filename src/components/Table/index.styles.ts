@@ -6,12 +6,14 @@ export default styled.table`
 `
 
 export const Cel = styled.tr`
-  display: block;
-  padding: 2px;
+  display: flex;
+  /* padding: 2px; */
 `
 
 export const Item = styled.td`
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 export const HeaderItem = styled.th`

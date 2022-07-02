@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Label, FormGroup } from 'reactstrap'
+import nookies from 'nookies'
 
 import FadeButton from '../components/FadeButton'
 import ToBrainfuck from '../scripts/ToBrainfuck'
 import Button from '../components/Button.styles'
 import Input from '../components/Input.styles'
 import Range from '../components/Range'
-import Code from '../components/Code'
+import Code from '../components/Code/block'
 
 import { Header, Editor, Main, EditorBackground, ResultPanel, Hero, HeroBackground, CodeInput } from '../styles/to.styles'
 
@@ -57,9 +58,8 @@ const To = () => {
 
 
   const $btnExecute_click = () => {
-    SetState('executing')
     startInterpreter()
-    startTimer()
+    SetState('executing')
   }
 
   const $btnStop_click = () => {
@@ -75,19 +75,19 @@ const To = () => {
   }
 
   const $btnContinue_click = () => {
-    SetState('executing')
     startTimer()
+    SetState('executing')
   }
 
   const $btnStep_click = () => {
-    SetState('stepped')
-
     clearInterval(Timer)
 
     if (Interpreter === null)
       startInterpreter()
     else
       interpreterNext()
+
+    SetState('stepped')
   }
 
   const $btnReset_click = () => {
@@ -101,13 +101,24 @@ const To = () => {
   }
 
   useEffect(() => {
+    const CookieText = nookies.get()['to-text']
+    if (CookieText) {
+      SetText(CookieText)
+      nookies.destroy(null, 'to-text')
+    }
+
+  }, [])
+
+  useEffect(() => {
     if (State === 'executing')
       startTimer()
 
     if (State === 'stepped')
       interpreterNext()
 
-  }, [ Interpreter ])
+  }, [ State ])
+
+  document.title += ' | To'
 
   return <>
     <Hero>
@@ -122,28 +133,26 @@ const To = () => {
           {
             (State === 'stopped') &&
             <>
-              <Button className='success mini' onClick={ $btnExecute_click }>Execute</Button>
-              <Button className='success mini' onClick={ $btnStep_click }>Step</Button>
+              <Button color='primary' className='success mini' onClick={ $btnExecute_click }>Execute</Button>
+              <Button color='primary' className='success mini' onClick={ $btnStep_click }>Step</Button>
+              <Button color='primary' outline className='mini' onClick={ $btnReset_click }>Reset</Button>
             </>
           }
           {
             (State === 'executing') &&
             <>
-              <Button className='err mini' onClick={ $btnStop_click }>Stop</Button>
-              <Button className='err mini' onClick={ $btnPause_click }>Pause</Button>
+              <Button color='primary' className='err mini' onClick={ $btnStop_click }>Stop</Button>
+              <Button color='primary' outline className='err mini' onClick={ $btnPause_click }>Pause</Button>
             </>
           }
           {
             (State === 'paused' || State === 'stepped') &&
             <>
-              <Button className='err mini' onClick={ $btnStop_click }>Stop</Button>
-              <Button className='success mini' onClick={ $btnStep_click }>Step</Button>
-              <Button className='success mini' onClick={ $btnContinue_click }>Continue</Button>
+              <Button color='primary' className='err mini' onClick={ $btnStop_click }>Stop</Button>
+              <Button color='primary' className='success mini' onClick={ $btnStep_click }>Step</Button>
+              <Button color='primary' outline className='success mini' onClick={ $btnContinue_click }>Continue</Button>
             </>
           }
-        </div>
-        <div>
-          <Button className='mini' onClick={ $btnReset_click }>Reset</Button>
         </div>
       </div>
 
@@ -190,13 +199,13 @@ const To = () => {
         Result?.result &&
         <ResultPanel>
           <FadeButton text='JSON Response'>
-            <Code language='json' code={ JSON.stringify(Result) } size='extended'/>
+            <Code language='json' code={ JSON.stringify(Result) }/>
           </FadeButton>
 
           <label>Result:</label>
 
           <Code language='brainfuck' code={ Result.result || '' }/>
-          <Button onClick={ () => navigator.clipboard.writeText(Result?.result) } className='mini'>Copy</Button>
+          <Button onClick={ () => navigator.clipboard.writeText(Result?.result) } color='primary' outline className='mini'>Copy</Button>
         </ResultPanel>
       }
     </Main>

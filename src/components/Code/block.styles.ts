@@ -1,18 +1,19 @@
 import styled from 'styled-components'
 
 
-export default styled.div`
-  position: relative;
+export default styled.section`
   display: flex;
+
+  width: 100%;
+  max-width: 768px; // --sm-size
 
   margin: 4px;
   padding-right: 20px;
 
   overflow: visible;
 
-  &.extended {
-    width: 100%;
-    max-width: 768px; // --sm-size
+  &.noCopy {
+    padding-right: 0;
   }
 
   &:hover .background {
@@ -46,32 +47,20 @@ export const LineNumbers = styled.ol`
 `
 
 export const Main = styled.code`
-  display: block;
-
-  margin: 0 4px;
-  padding: 4px;
-
   width: 100%;
-
-  border-radius: 4px;
-  background-color: var(--primary-cl-light);
 `
 
 export const Background = styled.div`
-  position: absolute;
-
-  height: 100%;
   width: 20px;
-
-  top: 0;
-  right: 0;
 
   opacity: 0;
   transition: opacity .6s;
 `
 
-export const CopySvg = styled.svg`
+export const Svg = styled.svg`
   height: 20px;
+
+  cursor: pointer;
 
   opacity: .8;
   transition: opacity .6s;

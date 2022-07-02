@@ -14,7 +14,7 @@ const FadeButton = (props: Props) => {
 
   return <section>
     <Header>
-      <Button onClick={ () => SetOpen(!Open) }>{ props.text }</Button>
+      <Button color='primary' outline onClick={ () => SetOpen(!Open) }>{ props.text }</Button>
     </Header>
     <Main>
       { Open && props.children }

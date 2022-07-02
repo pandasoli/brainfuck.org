@@ -1,25 +1,18 @@
+import nookies from 'nookies'
 
-import Table, { Cel as TableCel, Item as TableItem } from '../components/Table'
 import Button from '../components/Button.styles'
-import P from '../components/Paragraph.styles'
 import Memory from '../components/Memory'
-import Code from '../components/Code'
+import InlineCode from '../components/Code/inline'
+import BlockCode from '../components/Code/block'
 
-import { Hero, HeroBackground, HeroHeader, HeroMain, HeroTitle, Main } from '../styles/home.styles'
+import { Hero, HeroBackground, HeroHeader, HeroMain, HeroTitle, Main, P } from '../styles/home.styles'
 
 
 const Home = () => {
-  const Commands = [
-    { command: '>', description: 'Move the pointer right' },
-    { command: '<', description: 'Move the pointer left' },
-    { command: '[', description: 'Start loop' },
-    { command: '[', description: 'End loop' },
-    { command: '+', description: 'Increment 1 in the memory' },
-    { command: '-', description: 'Decrement 1 in the memory' },
-    { command: '.', description: 'Print memory' },
-    { command: ',', description: 'Ask for a character' },
-    { command: '!', description: 'End program' }
-  ]
+  const CodeProps = (code: string) => ({
+    code,
+    language: 'brainfuck'
+  })
 
   return <>
     <Hero>
@@ -32,33 +25,68 @@ const Home = () => {
       </HeroHeader>
 
       <HeroMain>
-        <Button color='primary' href='/from'>Convert from Brainfuck</Button>
-        <Button color='primary' href='/to'>Convert to Brainfuck</Button>
+        <Button color='primary' outline href='/from'>Convert from Brainfuck</Button>
+        <Button color='primary' outline href='/to'>Convert to Brainfuck</Button>
+        <Button color='primary' href='#whatsit'>Get started</Button>
       </HeroMain>
     </Hero>
 
     <Main>
-      <h1>What the fuck is Brainfuck</h1>
+      <h1 id='whatsit'>What the fuck is Brainfuck</h1>
 
-      <Memory items={[ 1, 2, 0, 0, 0 ]} pointer={ 1 }/>
-
+      <h2>The bored part (history)</h2>
       <P>
         Brainfuck is one of the most famous esoteric programming languages.
 
-        Brainfuck operates on an array of memory cells, each initially set to zero. (originaly the array was 30,000 cells long)
-        The only language commands are:
+        Brainfuck operates on an array of memory cells, each initially set to zero. (originaly the array was 30,000 cells long).
       </P>
 
-      <Table columns={[ 'Command', 'Description' ]}>
-        {
-          Commands.map(($, _) =>
-            <TableCel key={ _ }>
-              <TableItem><Code code={ $.command } language='brainfuck' noCopy/></TableItem>
-              <TableItem>{ $.description }</TableItem>
-            </TableCel>
-          )
-        }
-      </Table>
+      <br/>
+      <h2>LET'S FUCKING CODE</h2>
+
+      <P>Well, Brainfuck is written based on a memory, just as it is:</P>
+      <Memory items={[ 0, 3, 2, 0, 0 ]} pointer={ 2 }/>
+
+      <P>
+        To add 1 to the memory we use the code <InlineCode { ...CodeProps('+') }/><br/>
+        to decrease 1                          <InlineCode { ...CodeProps('-') }/>
+      </P>
+      <P>
+        to print                   <InlineCode { ...CodeProps('.') }/><br/>
+        to ask a character (input) <InlineCode { ...CodeProps(',') }/>
+      </P>
+      <P>
+        If you need to end the program before the end, use <InlineCode { ...CodeProps('!') }/>.
+      </P>
+      <P>
+        To move the memory pointer to the left <InlineCode { ...CodeProps('<') }/>,<br/>
+        to the right                           <InlineCode { ...CodeProps('>') }/>.
+      </P>
+      <P>
+        Sometimes it is difficult to make big changes in value,<br/>
+        for that we use loops. <InlineCode { ...CodeProps('[') }/> open and <InlineCode { ...CodeProps(']') }/> close.
+      </P>
+      <P>
+        The loop ends when the memory space is 0,<br/>
+        so to fill a memory space with loops,<br/>
+        we use two or more memory spaces.
+      </P>
+
+      <P>One example is:</P>
+      <BlockCode { ...CodeProps('++++++\n[\n\t> ++++++++++\n\t< -\n]\n> .') }/>
+
+      <P>The same code in JavaScript is:</P>
+      <BlockCode { ...CodeProps('for (let x = 0; x < 6; x++) {\n\tmemory[pointer] += 10;\n}\nconsole.log( String.fromCharCode(memory[pointer]) )') } language='javascript'/>
+
+      <P>And the memory will be:</P>
+      <Memory items={[ 0, 60 ]} pointer={ 0 }/>
+
+      <Button
+        onClick={ () => nookies.set(null, 'from-code', '') }
+        color='primary'
+        href='/from'
+      >Let's code your first code?</Button>
+
     </Main>
   </>
 }

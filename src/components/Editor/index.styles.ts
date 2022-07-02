@@ -17,8 +17,8 @@ export default styled.div`
   z-index: 2;
 
   * {
-    font-family: 'FiraCode';
-    font-size: .8rem;
+    font-family: 'FiraCode' !important;
+    font-size: .8rem !important;
   }
 
   .editorType {
@@ -31,6 +31,7 @@ export default styled.div`
 
     textarea {
       text-align: left;
+      overflow: auto !important;
     }
 
     pre span {
@@ -73,9 +74,10 @@ export const LineNumbers = styled.ol`
   align-items: center;
 
   margin: 4px;
-  padding: 4px;
+  padding: 10px 4px;
 
   list-style: none;
+  user-select: none;
 
   border-radius: 4px;
   background-color: var(--primary-cl-light);

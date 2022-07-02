@@ -10,7 +10,8 @@ const Header = () => {
   const buttons = [
     { link: '/', text: 'Home' },
     { link: '/from', text: 'From Brainfuck' },
-    { link: '/to', text: 'To Brainfuck' }
+    { link: '/to', text: 'To Brainfuck' },
+    { link: '/ascii', text: 'ASCII' }
   ]
 
   return (

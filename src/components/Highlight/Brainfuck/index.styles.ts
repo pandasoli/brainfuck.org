@@ -1,5 +1,10 @@
 import styled from 'styled-components'
 
+
+export default styled.label`
+  display: block;
+`
+
 const Char = styled.span`
   display: inline-block;
 
@@ -25,6 +30,10 @@ const Char = styled.span`
     border-radius: 2px;
     background-color: var(--secondary-cl);
   }
+`
+
+export const NewLine = styled(Char)`
+  height: 14px;
 `
 
 export const MoveRight = styled(Char)`

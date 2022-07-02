@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/home'
 import From from './pages/from'
 import To from './pages/to'
+import ASCII from './pages/ascii'
 
 
 const App = () =>
@@ -11,6 +12,7 @@ const App = () =>
       <Route path='/' element={ <Home/> }/>
       <Route path='/from' element={ <From/> }/>
       <Route path='/to' element={ <To/> }/>
+      <Route path='/ascii' element={ <ASCII/> }/>
     </Routes>
   </BrowserRouter>
 

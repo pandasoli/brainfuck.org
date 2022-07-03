@@ -1,7 +1,10 @@
 <div align='center'>
 
-# Brainfuck .org
+![brainfuck.org logo](doc/logo.png)
 
-Nothing to say yet...
+The best site to learn and play with Brainfuck  
+The most complete site for Brainfuck study
+
+[Get started](brainfuck-org.vercel.app)
 
 </div>

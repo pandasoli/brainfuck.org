@@ -4,7 +4,7 @@ import nookies from 'nookies'
 
 import FadeButton from '../components/FadeButton'
 import ToBrainfuck from '../scripts/ToBrainfuck'
-import Button from '../components/Button.styles'
+import Button from '../components/Button'
 import Input from '../components/Input.styles'
 import Range from '../components/Range'
 import Code from '../components/Code/block'

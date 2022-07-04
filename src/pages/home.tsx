@@ -1,6 +1,6 @@
 import nookies from 'nookies'
 
-import Button from '../components/Button.styles'
+import Button from '../components/Button'
 import Memory from '../components/Memory'
 import InlineCode from '../components/Code/inline'
 import BlockCode from '../components/Code/block'

@@ -1,7 +1,7 @@
 import ReactSimpleCodeEditor from 'react-simple-code-editor'
 import { Button } from 'reactstrap'
 
-import BFHighlight from '../Highlight/Brainfuck'
+import BFHighlight from '../Code/Highlight/Brainfuck'
 import Container, { LineNumbers, Background, DivWarning } from './index.styles'
 
 type CodeType = {

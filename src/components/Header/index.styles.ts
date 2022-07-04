@@ -3,6 +3,8 @@ import { NavItem as NavItemC } from 'reactstrap'
 
 
 export const Title = styled.h1`
+  margin: 0;
+
   font-family: 'Alpha centauri';
 `
 

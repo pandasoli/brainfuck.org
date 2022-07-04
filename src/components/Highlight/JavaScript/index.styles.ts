@@ -3,6 +3,8 @@ import styled from 'styled-components'
 
 export default styled.label`
   display: block;
+
+  white-space: nowrap;
   color: #c0caf5;
 `
 

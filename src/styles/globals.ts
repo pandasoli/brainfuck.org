@@ -122,7 +122,7 @@ export const GlobalStyle = createGlobalStyle`
 
   ::-webkit-scrollbar {
     width: 14px;
-    height: 18px;
+    height: 14px;
 
     background-color: transparent;
   }

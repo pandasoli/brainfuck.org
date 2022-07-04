@@ -24,7 +24,7 @@ export const GlobalStyle = createGlobalStyle`
 
     color: var(--primary-font-cl);
     line-height: 1.33;
-    font-size: min(4.2vw, 1.06rem);
+    font-size: var(--text-regular);
     font-family: 'MavenPro';
     font-weight: normal;
     text-rendering: optimizeLegibility;
@@ -55,10 +55,12 @@ export const GlobalStyle = createGlobalStyle`
 
     --box-shadow: 0px 0px 3px var(--secondary-cl);
 
+    --header-0: 120px;
     --header-1: 64px;
     --header-2: 48px;
     --header-3: 42px;
     --header-4: 32px;
+    --header-5: 26px;
 
     --text-medium: 10px;
     --text-regular: 16px;
@@ -82,6 +84,10 @@ export const GlobalStyle = createGlobalStyle`
     min-height: 100vh;
 
     background-color: var(--primary-cl);
+  }
+
+  h2, h2 * {
+    font-size: var(--header-5);
   }
 
   #root {

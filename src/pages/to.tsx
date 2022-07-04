@@ -118,7 +118,7 @@ const To = () => {
 
   }, [ State ])
 
-  document.title += ' | To'
+  document.title = 'Brainfuck.org | To'
 
   return <>
     <Hero>

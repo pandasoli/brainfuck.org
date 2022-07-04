@@ -23,6 +23,8 @@ const Interpreters = () => {
 
   }, [])
 
+  document.title = 'Brainfuck.org | Interpreters'
+
   return <>
     <Hero>
       <HeroBackground/>

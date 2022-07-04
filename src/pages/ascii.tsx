@@ -32,7 +32,7 @@ const ASCII = () => {
       })
   }
 
-  document.title += ' | ASCII'
+  document.title = 'Brainfuck.org | ASCII'
 
   return <>
     <h2>Convertion</h2>

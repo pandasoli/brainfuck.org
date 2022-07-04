@@ -1,11 +1,13 @@
 import styled from 'styled-components'
 
 
-export const FooterCharTable = styled.ul`
+export const FooterCharTable = styled.ol`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+
+  padding: 0;
 
   li {
     display: flex;

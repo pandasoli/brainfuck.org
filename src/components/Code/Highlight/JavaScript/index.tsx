@@ -26,7 +26,7 @@ const JavaScript = (props: Props) => {
   let InsideString = { begin: '', inInterpolation: false, is: false, ignoreEnd: false }
   const parts: string[][] = []
 
-  props.code?.split('\n').map(($1, _) => {
+  props.code?.split('\n').forEach(($1, _) => {
     const line = [ '' ]
 
     $1.split('').forEach(($, _) => {

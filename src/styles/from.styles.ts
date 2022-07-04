@@ -42,7 +42,6 @@ export const Header = styled.header`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
 
     .range {
       margin-top: 40px;

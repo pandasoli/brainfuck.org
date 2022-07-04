@@ -32,7 +32,7 @@ const Interpreters = () => {
       {
         Object.keys(Codes).map(($, _) =>
           <React.Fragment key={ _ }>
-            <h1><a href={ Codes[$ as CodeLangs].repo }>{ $ }</a></h1>
+            <h2><a href={ Codes[$ as CodeLangs].repo }>{ $ }</a></h2>
             <BlockCode language={ $.toLowerCase() } code={ Codes[$ as CodeLangs].code || '' }/>
           </React.Fragment>
         )

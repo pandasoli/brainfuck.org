@@ -5,7 +5,7 @@ export default styled.ol`
   position: relative;
   display: flex;
 
-  margin: 0 0 14px 0;
+  margin: 0 0 10px 0;
   padding: 0;
 
   li {

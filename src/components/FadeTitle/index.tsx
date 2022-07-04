@@ -13,7 +13,7 @@ const FadeTitle = (props: Props) => {
 
   return <section>
     <Header onClick={ () => SetOpen(!Open) }>
-      <h1>{ props.text }</h1>
+      <h2>{ props.text }</h2>
 
       <Svg viewBox='0 0 512.000000 512.000000' className={ Open ? 'open' : '' }>
         <g transform='translate(0.000000,512.000000) scale(0.100000,-0.100000)'>

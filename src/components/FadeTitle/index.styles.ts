@@ -20,7 +20,7 @@ export const Header = styled.header`
   justify-content: center;
   align-items: center;
 
-  padding: 0px 60px;
+  padding: 20px 60px 0 60px;
 
   cursor: pointer;
 `

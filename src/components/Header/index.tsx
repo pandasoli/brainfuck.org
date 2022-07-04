@@ -11,7 +11,8 @@ const Header = () => {
     { link: '/', text: 'Home' },
     { link: '/from', text: 'From Brainfuck' },
     { link: '/to', text: 'To Brainfuck' },
-    { link: '/ascii', text: 'ASCII' }
+    { link: '/ascii', text: 'ASCII' },
+    { link: '/interpreters', text: 'Interpreters' }
   ]
 
   return (

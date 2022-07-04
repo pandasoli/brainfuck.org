@@ -40,7 +40,7 @@ export const HeroHeader = styled.div`
 export const HeroTitle = styled.h1`
   margin-bottom: 20px;
 
-  font-size: 14vw;
+  font-size: min(var(--header-0), 15vw);
   font-family: 'Alpha centauri';
 
   z-index: 1;
@@ -55,12 +55,18 @@ export const HeroMain = styled.div`
   padding-top: 20px;
 
   z-index: 1;
+
+  .btn {
+    margin: 6px;
+  }
 `
 
 export const Main = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  max-width: 100%;
 
   padding: 20px 20px 0px 20px;
 `

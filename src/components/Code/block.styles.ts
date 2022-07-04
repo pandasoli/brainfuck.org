@@ -5,12 +5,13 @@ export default styled.section`
   display: flex;
 
   width: 100%;
-  max-width: 768px; // --sm-size
+  max-width: 100%;
+
+  @media (min-width: 768px) { max-width: 768px; } // --sm-size
+  @media (min-width: 992px) { max-width: 992px; } // --md-size
 
   margin: 4px;
   padding-right: 20px;
-
-  overflow: visible;
 
   &.noCopy {
     padding-right: 0;
@@ -48,6 +49,10 @@ export const LineNumbers = styled.ol`
 
 export const Main = styled.code`
   width: 100%;
+  @media (min-width: 768px) { max-width: 768px; } // --sm-size
+  @media (min-width: 992px) { max-width: 992px; } // --md-size
+
+  overflow: auto;
 `
 
 export const Background = styled.div`

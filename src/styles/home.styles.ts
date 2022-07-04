@@ -69,6 +69,10 @@ export const Main = styled.section`
   max-width: 100%;
 
   padding: 20px 20px 0px 20px;
+
+  .btn {
+    margin-top: 40px;
+  }
 `
 
 export const P = styled(PC)`

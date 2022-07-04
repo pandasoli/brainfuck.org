@@ -111,8 +111,6 @@ const JavaScript = (props: Props) => {
     )
   }
 
-  console.log(parts)
-
   return <>
     {
       parts.map(($, _) =>

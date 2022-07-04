@@ -7,12 +7,13 @@ export default styled.section`
   width: 100%;
   max-width: 100%;
 
+  @media (max-width: 768px) { max-width: 100%; }
   @media (min-width: 768px) { max-width: 768px; } // --sm-size
   @media (min-width: 992px) { max-width: 992px; } // --md-size
 
   margin: 4px;
-  padding-right: 20px;
-  padding-left: 40px;
+  padding-right: 10px;
+  padding-left: 20px;
 
   &.noCopy {
     padding-right: 0;
@@ -50,6 +51,8 @@ export const LineNumbers = styled.ol`
 
 export const Main = styled.code`
   width: 100%;
+
+  @media (max-width: 768px) { max-width: 100%; }
   @media (min-width: 768px) { max-width: 768px; } // --sm-size
   @media (min-width: 992px) { max-width: 992px; } // --md-size
 

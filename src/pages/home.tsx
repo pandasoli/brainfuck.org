@@ -4,7 +4,9 @@ import Button from '../components/Button.styles'
 import Memory from '../components/Memory'
 import InlineCode from '../components/Code/inline'
 import BlockCode from '../components/Code/block'
-
+import Nav from '../components/Nav.styles'
+import NavLink from '../components/NavLink'
+import { NavItem } from 'reactstrap'
 import { Hero, HeroBackground, HeroHeader, HeroMain, HeroTitle, Main, P } from '../styles/home.styles'
 
 
@@ -27,14 +29,17 @@ const Home = () => {
       <HeroMain>
         <Button color='primary' outline href='/from'>Convert from Brainfuck</Button>
         <Button color='primary' outline href='/to'>Convert to Brainfuck</Button>
-        <Button color='primary' href='#whatsit'>Get started</Button>
+        <Button color='primary' href='#main'>Get started</Button>
       </HeroMain>
     </Hero>
 
-    <Main>
-      <h1 id='whatsit'>What the fuck is Brainfuck</h1>
+    <Main id='main'>
+      <Nav justified>
+        <NavItem><NavLink href='#history'>History</NavLink></NavItem>
+        <NavItem><NavLink href='#code'>Code</NavLink></NavItem>
+      </Nav>
 
-      <h2>The bored part (history)</h2>
+      <h2 id='history'>The bored part (history)</h2>
       <P>
         Brainfuck is one of the most famous esoteric programming languages.
 
@@ -42,7 +47,7 @@ const Home = () => {
       </P>
 
       <br/>
-      <h2>LET'S FUCKING CODE</h2>
+      <h2 id='code'>LET'S FUCKING CODE</h2>
 
       <P>Well, Brainfuck is written based on a memory, just as it is:</P>
       <Memory items={[ 0, 3, 2, 0, 0 ]} pointer={ 2 }/>

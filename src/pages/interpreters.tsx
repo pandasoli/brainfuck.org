@@ -6,13 +6,13 @@ import { Hero, HeroBackground, Main } from '../styles/interpreters.styles'
 
 type CodeLangs = 'JavaScript'
 type CodesType = {
-  JavaScript: { link: string, code?: string }
+  JavaScript: { repo: string, link: string, code?: string }
 }
 
 
 const Interpreters = () => {
   const [ Codes, SetCodes ] = useState<CodesType>({
-    JavaScript: { link: 'https://raw.githubusercontent.com/pandasoli/Brainfuck/master/interpreter.min.js' }
+    JavaScript: { repo: 'https://github.com/pandasoli/Brainfuck', link: 'https://raw.githubusercontent.com/pandasoli/Brainfuck/master/interpreter.min.js' }
   })
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const Interpreters = () => {
       {
         Object.keys(Codes).map(($, _) =>
           <React.Fragment key={ _ }>
-            <h1>{ $ }</h1>
+            <h1><a href={ Codes[$ as CodeLangs].repo }>{ $ }</a></h1>
             <BlockCode language={ $.toLowerCase() } code={ Codes[$ as CodeLangs].code || '' }/>
           </React.Fragment>
         )

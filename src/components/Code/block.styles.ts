@@ -12,6 +12,7 @@ export default styled.section`
 
   margin: 4px;
   padding-right: 20px;
+  padding-left: 40px;
 
   &.noCopy {
     padding-right: 0;

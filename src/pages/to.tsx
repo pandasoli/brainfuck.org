@@ -25,7 +25,7 @@ const To = () => {
   const [ PauseInterpreter, SetPauseInterpreter ] = useState(true)
   const [ Result, SetResult ] = useState({} as Result)
   const [ Speed, SetSpeed ] = useState(30)
-  const [ Text, SetText ] = useState('Panda')
+  const [ Text, SetText ] = useState(nookies.get()['to-text'] || 'Panda')
 
   const [ Interpreter, SetInterpreter ] = useState<Generator | null>({} as Generator)
   const [ State, SetState ] = useState('stopped')
@@ -100,14 +100,9 @@ const To = () => {
     SetTimer({} as NodeJS.Timeout)
   }
 
-  useEffect(() => {
-    const CookieText = nookies.get()['to-text']
-    if (CookieText) {
-      SetText(CookieText)
-      nookies.destroy(null, 'to-text')
-    }
-
-  }, [])
+  window.onbeforeunload = () => {
+    nookies.set(null, 'to-text', Text)
+  }
 
   useEffect(() => {
     if (State === 'executing')

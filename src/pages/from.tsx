@@ -39,7 +39,7 @@ type CodeType = {
 const From = () => {
   const [ Code, SetCode ] = useState<CodeType>({
     edited: false,
-    code: '++++++++\n[\n  > ++++++++++\n  < -\n]\n> . P 80\n\n+++++++++++++++++ . a 97\n+++++++++++++ . n 110\n---------- . d 100\n--- . a 97\n!\n',
+    code: nookies.get()['from-code'] || '++++++++\n[\n  > ++++++++++\n  < -\n]\n> . P 80\n\n+++++++++++++++++ . a 97\n+++++++++++++ . n 110\n---------- . d 100\n--- . a 97\n!\n',
     warnings: []
   })
 
@@ -143,14 +143,9 @@ const From = () => {
     SetWarn(true)
   }
 
-  useEffect(() => {
-    const CookieCode = nookies.get()['from-code']
-    if (CookieCode) {
-      SetCode({ ...Code, code: CookieCode })
-      nookies.destroy(null, 'from-code')
-    }
-
-  }, [])
+  window.onbeforeunload = () => {
+    nookies.set(null, 'from-code', Code.code)
+  }
 
   useEffect(() => {
     if (State === 'executing')

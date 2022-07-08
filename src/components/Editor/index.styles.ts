@@ -73,6 +73,8 @@ export const LineNumbers = styled.ol`
   flex-direction: column;
   align-items: center;
 
+  min-width: 30px;
+
   margin: 4px;
   padding: 10px 4px;
 

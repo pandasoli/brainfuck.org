@@ -30,16 +30,18 @@ export const Header = styled.header`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: center;
 
   width: 100%;
   @media (min-width: 768px) { max-width: 768px; } // --sm-size
   @media (min-width: 992px) { max-width: 992px; } // --md-size
   @media (min-width: 1200px) { max-width: 1200px; } // --lg-size
 
-  padding-bottom: 10px;
+  padding: 0 20px 10px 20px;
 
   & > div {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
 
     .range {

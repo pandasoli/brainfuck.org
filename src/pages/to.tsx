@@ -124,39 +124,40 @@ const To = () => {
 
     <Header>
       <div>
-        <div>
-          {
-            (State === 'stopped') &&
-            <>
-              <Button color='success' className='mini' onClick={ $btnExecute_click }>Execute</Button>
-              <Button color='success' className='mini' onClick={ $btnStep_click }>Step</Button>
-              <Button color='primary' outline className='mini' onClick={ $btnReset_click }>Reset</Button>
-            </>
-          }
-          {
-            (State === 'executing') &&
-            <>
-              <Button color='error' className='mini' onClick={ $btnStop_click }>Stop</Button>
-              <Button color='error' outline className='mini' onClick={ $btnPause_click }>Pause</Button>
-            </>
-          }
-          {
-            (State === 'paused' || State === 'stepped') &&
-            <>
-              <Button color='error' className='mini' onClick={ $btnStop_click }>Stop</Button>
-              <Button color='success' className='mini' onClick={ $btnStep_click }>Step</Button>
-              <Button color='success' outline className='mini' onClick={ $btnContinue_click }>Continue</Button>
-            </>
-          }
-        </div>
+        {
+          (State === 'stopped') &&
+          <>
+            <Button color='success' className='mini' onClick={ $btnExecute_click }>Execute</Button>
+            <Button color='success' className='mini' onClick={ $btnStep_click }>Step</Button>
+            <Button color='primary' outline className='mini' onClick={ $btnReset_click }>Reset</Button>
+          </>
+        }
+        {
+          (State === 'executing') &&
+          <>
+            <Button color='error' className='mini' onClick={ $btnStop_click }>Stop</Button>
+            <Button color='error' outline className='mini' onClick={ $btnPause_click }>Pause</Button>
+          </>
+        }
+        {
+          (State === 'paused' || State === 'stepped') &&
+          <>
+            <Button color='error' className='mini' onClick={ $btnStop_click }>Stop</Button>
+            <Button color='success' className='mini' onClick={ $btnStep_click }>Step</Button>
+            <Button color='success' outline className='mini' onClick={ $btnContinue_click }>Continue</Button>
+          </>
+        }
       </div>
 
       <div>
-        <label>Velocity:</label>
-        <Range
-          value={ Speed }
-          onSlide={ _value => SetSpeed(_value) }
-        />
+        <div>
+          <label>Velocity:</label>
+          <Range
+            value={ Speed }
+            className='range'
+            onSlide={ _value => SetSpeed(_value) }
+          />
+        </div>
 
         <FormGroup check inline>
           <Input

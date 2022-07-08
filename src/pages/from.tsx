@@ -51,7 +51,7 @@ const From = () => {
 
   const [ Interpreter, SetInterpreter ] = useState<Generator | null>(null)
   const [ State, SetState ] = useState<'stopped' | 'executing' | 'stepped' | 'paused'>('stopped')
-  const [ Timer, SetTimer ] = useState({} as NodeJS.Timeout)
+  let Timer = {} as NodeJS.Timeout
 
   function fillArray(length: number, startBy: number = 0) {
     const res = []
@@ -84,7 +84,7 @@ const From = () => {
   }
 
   function startTimer() {
-    SetTimer(setInterval(interpreterNext, Speed))
+    Timer = setInterval(interpreterNext, Speed)
   }
 
   function startInterpreter() {

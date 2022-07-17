@@ -18,17 +18,18 @@ const Char = styled.span`
 
       transform: scale(1.4, 1.4);
       border: 1px solid var(--primary-font-cl);
-      background-color: #de5971;
+      background-color: var(--red-cl);
     }
   }
 
   &.warning {
     width: 14px;
 
+    color: var(--primary-font-cl);
     text-align: center;
 
     border-radius: 2px;
-    background-color: var(--secondary-cl);
+    background-color: var(--yellow-cl);
   }
 `
 

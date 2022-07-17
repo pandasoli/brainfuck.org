@@ -13,6 +13,7 @@ import Editor from '../components/Editor'
 import Range from '../components/Range'
 
 import { Header, FooterCharTable, Footer, Main, MemoryHeader, ResultPanel, Hero, HeroBackground } from '../styles/from.styles'
+import { timeEnd } from 'console'
 
 type Result = {
   memory: number[]
@@ -32,26 +33,32 @@ type Result = {
 type CodeType = {
   edited: boolean
   code: string
-  warnings: number[]
+}
+
+type SettingsType = {
+  pause: boolean
+  maxMemory: number | null
+  speed: number
+  warn: boolean
 }
 
 
 const From = () => {
   const [ Code, SetCode ] = useState<CodeType>({
     edited: false,
-    code: nookies.get()['from-code'] || '++++++++\n[\n  > ++++++++++\n  < -\n]\n> . P 80\n\n+++++++++++++++++ . a 97\n+++++++++++++ . n 110\n---------- . d 100\n--- . a 97\n!\n',
-    warnings: []
+    code: '++++++++\n[\n  > ++++++++++\n  < -\n]\n> . P 80\n\n+++++++++++++++++ . a 97\n+++++++++++++ . n 110\n---------- . d 100\n--- . a 97\n!\n',
   })
 
-  const [ PauseInterpreter, SetPauseInterpreter ] = useState(true)
-  const [ MaxMemory, SetMaxMemory ] = useState<number | null>(null)
-  const [ Result, SetResult ] = useState({} as Result)
-  const [ Speed, SetSpeed ] = useState(30)
-  const [ Warn, SetWarn ] = useState(true)
-
+  const [ Result, SetResult ] = useState<Result | null>(null)
+  const [ Settings, SetSettings ] = useState<SettingsType>({
+    pause: true,
+    maxMemory: null,
+    speed: 30,
+    warn: true
+  })
   const [ Interpreter, SetInterpreter ] = useState<Generator | null>(null)
   const [ State, SetState ] = useState<'stopped' | 'executing' | 'stepped' | 'paused'>('stopped')
-  let Timer = {} as NodeJS.Timeout
+  const [ Timer, SetTimer ] = useState({} as NodeJS.Timeout)
 
   function fillArray(length: number, startBy: number = 0) {
     const res = []
@@ -69,34 +76,31 @@ const From = () => {
       SetResult(response.value)
       SetCode({
         ...Code,
-        edited: false,
-        warnings: response?.value?.warnings?.map($ => $.index)
+        edited: false
       })
     }
 
     if (response.done) {
       SetState('stopped')
-      SetInterpreter(null)
-      clearInterval(Timer)
     }
     else if (State === 'stepped')
       Interpreter?.next()
   }
 
   function startTimer() {
-    Timer = setInterval(interpreterNext, Speed)
+    SetTimer(setInterval(interpreterNext, Settings.speed))
   }
 
-  function startInterpreter() {
-    SetCode({ ...Code, edited: false, warnings: [] })
+  function startInterpreter(state?: string) {
+    SetCode($ => ({ ...$, edited: false }))
 
     SetInterpreter(
       FromBrainfuck(
         Code.code,
-        State === 'stepped' || PauseInterpreter,
-        Warn,
+        state === 'stepped' || Settings.pause,
+        Settings.warn,
         undefined,
-        MaxMemory || undefined
+        Settings.maxMemory || undefined
       )
     )
   }
@@ -105,8 +109,7 @@ const From = () => {
   const $btnStop_click = () => {
     SetState('stopped')
     SetInterpreter(null)
-    clearInterval(Timer)
-    SetResult({} as Result)
+    SetResult(null)
   }
 
   const $btnExecute_click = () => {
@@ -128,28 +131,56 @@ const From = () => {
     clearInterval(Timer)
 
     if (Interpreter === null)
-      startInterpreter()
+      startInterpreter('stepped')
     else
       interpreterNext()
 
-    SetState('stepped')
+    if (State !== 'stepped')
+      SetState('stepped')
   }
 
   const $btnReset_click = () => {
-    SetPauseInterpreter(true)
-    SetMaxMemory(null)
-    SetResult({} as Result)
-    SetSpeed(30)
-    SetWarn(true)
+    SetSettings({
+      pause: true,
+      maxMemory: null,
+      speed: 30,
+      warn: true
+    })
+
+    SetState('stopped')
+    SetResult(null)
+    clearInterval(Timer)
   }
 
   window.onbeforeunload = () => {
     nookies.set(null, 'from-code', Code.code)
+    nookies.set(null, 'from-result', JSON.stringify(Result))
+    nookies.set(null, 'from-settings', JSON.stringify(Settings))
   }
+
+  useEffect(() => {
+    const cookies = nookies.get()
+
+    const states: {
+      [state: string]: ($: string) => any
+    } = {
+      'from-code': ($2: string) => SetCode($ => ({ ...$, code: $2 })),
+      'from-result': ($: string) => SetResult(JSON.parse($)),
+      'from-settings': ($: string) => SetSettings(JSON.parse($)),
+    }
+
+    for (let state in states)
+      if (cookies[state] !== undefined)
+        states[state](cookies[state])
+
+  }, [])
 
   useEffect(() => {
     if (State === 'executing')
       startTimer()
+
+    if (State === 'stopped')
+      clearInterval(Timer)
 
     if (State === 'stepped')
       interpreterNext()
@@ -194,9 +225,9 @@ const From = () => {
         <div>
           <label>Velocity:</label>
           <Range
-            value={ Speed }
+            value={ Settings.speed }
             className='range'
-            onSlide={ _value => SetSpeed(_value) }
+            onSlide={ $ => SetSettings({ ...Settings, speed: $}) }
           />
         </div>
 
@@ -206,16 +237,16 @@ const From = () => {
             type='number'
             placeholder='auto'
             min={ 0 }
-            value={ MaxMemory || '' }
-            onChange={ ($: any) => SetMaxMemory(Number($.currentTarget.value)) }
+            value={ Settings.maxMemory || '' }
+            onChange={ ($: any) => SetSettings({ ...Settings, maxMemory: Number($.currentTarget.value)}) }
           />
         </div>
 
         <FormGroup check inline>
           <Input
             type='checkbox'
-            defaultChecked={ PauseInterpreter }
-            onChange={ ($: any) => SetPauseInterpreter($.currentTarget.checked) }
+            checked={ Settings.pause }
+            onChange={ ($: any) => SetSettings({ ...Settings, pause: $.currentTarget.checked}) }
           />
           <Label check>Pause</Label>
         </FormGroup>
@@ -223,8 +254,8 @@ const From = () => {
         <FormGroup check inline>
           <Input
             type='checkbox'
-            defaultChecked={ Warn }
-            onChange={ ($: any) => SetWarn($.currentTarget.checked) }
+            checked={ Settings.warn }
+            onChange={ ($: any) => SetSettings({ ...Settings, warn: $.currentTarget.checked}) }
           />
           <Label check>Warn</Label>
         </FormGroup>
@@ -233,7 +264,7 @@ const From = () => {
 
     <Main>
       <MemoryHeader>
-        <Memory items={Result?.memory || [ 0, 0, 0 ]} max={ MaxMemory || undefined } pointer={ Result?.pointer }/>
+        <Memory items={Result?.memory || [ 0, 0, 0 ]} max={ Settings.maxMemory || undefined } pointer={ Result?.pointer || 0 }/>
         <p>{ Result?.error ?? '' }</p>
       </MemoryHeader>
 
@@ -247,14 +278,14 @@ const From = () => {
       />
 
       {
-        Result.index > 0 &&
+        Result?.result !== undefined &&
         <ResultPanel>
           <FadeButton text='JSON Response'>
             <CodeComponent language='json' code={ JSON.stringify(Result) }/>
           </FadeButton>
 
           <label>Result: { Result ? Result.result : '' }</label>
-          <Button onClick={ () => navigator.clipboard.writeText(Result?.result) } color='primary' outline className='mini'>Copy</Button>
+          <Button onClick={ () => navigator.clipboard.writeText(Result?.result || '') } color='primary' outline className='mini'>Copy</Button>
         </ResultPanel>
       }
     </Main>
@@ -263,10 +294,10 @@ const From = () => {
       <FadeTitle text='ASCII Table'>
         <FooterCharTable>
           {
-            fillArray(255, 1).map(($, _) =>
+            fillArray(255).map(($, _) =>
               <li key={ _ }>
-                <span>{ _ + 1 }</span>
-                <label>{ `: ${String.fromCharCode(_ + 1)}` }</label>
+                <span>{ _ }</span>
+                <label>{ `: ${String.fromCharCode(_)}` }</label>
               </li>
             )
           }

@@ -11,7 +11,7 @@ import Code from '../components/Code/block'
 
 import { Header, Editor, Main, EditorBackground, ResultPanel, Hero, HeroBackground, CodeInput } from '../styles/to.styles'
 
-type Result = {
+type ResultType = {
   ascii: number
   memory: number[]
   index: number
@@ -20,39 +20,45 @@ type Result = {
   error: string
 }
 
+type SettingsType = {
+  pause: boolean
+  speed: number
+}
+
 
 const To = () => {
-  const [ PauseInterpreter, SetPauseInterpreter ] = useState(true)
-  const [ Result, SetResult ] = useState({} as Result)
-  const [ Speed, SetSpeed ] = useState(30)
   const [ Text, SetText ] = useState(nookies.get()['to-text'] || 'Panda')
+
+  const [ Result, SetResult ] = useState<ResultType | null>(null)
+  const [ Settings, SetSettings ] = useState<SettingsType>({
+    pause: true,
+    speed: 30
+  })
 
   const [ Interpreter, SetInterpreter ] = useState<Generator | null>({} as Generator)
   const [ State, SetState ] = useState('stopped')
   const [ Timer, SetTimer ] = useState({} as NodeJS.Timeout)
 
   function interpreterNext() {
-    const response = Interpreter?.next() as { value: Result, done: boolean }
+    const response = Interpreter?.next() as { value: ResultType, done: boolean }
 
     if (response.value)
       SetResult(response.value)
 
     if (response.done) {
       SetState('stopped')
-      clearInterval(Timer)
-      SetInterpreter(null)
     }
     else if (State === 'stepped')
       Interpreter?.next()
   }
 
   function startTimer() {
-    SetTimer(setInterval(interpreterNext, Speed))
+    SetTimer(setInterval(interpreterNext, Settings.speed))
   }
 
   function startInterpreter() {
     SetInterpreter(
-      ToBrainfuck(Text, PauseInterpreter)
+      ToBrainfuck(Text, Settings.pause)
     )
   }
 
@@ -64,9 +70,7 @@ const To = () => {
 
   const $btnStop_click = () => {
     SetState('stopped')
-    SetInterpreter(null)
-    clearInterval(Timer)
-    SetResult({} as Result)
+    SetResult(null)
   }
 
   const $btnPause_click = () => {
@@ -91,18 +95,38 @@ const To = () => {
   }
 
   const $btnReset_click = () => {
-    SetText('')
-    SetResult({} as Result)
-    SetSpeed(30)
-    SetPauseInterpreter(true)
+    SetSettings({
+      pause: true,
+      speed: 30
+    })
+
     SetState('stopped')
-    SetInterpreter({} as Generator)
-    SetTimer({} as NodeJS.Timeout)
+    SetResult(null)
+    clearInterval(Timer)
   }
 
   window.onbeforeunload = () => {
     nookies.set(null, 'to-text', Text)
+    nookies.set(null, 'to-result', JSON.stringify(Result))
+    nookies.set(null, 'to-settings', JSON.stringify(Settings))
   }
+
+  useEffect(() => {
+    const cookies = nookies.get()
+
+    const states: {
+      [state: string]: ($: string) => any
+    } = {
+      'to-code': ($: string) => SetText($),
+      'to-result': ($: string) => SetResult(JSON.parse($)),
+      'to-settings': ($: string) => SetSettings(JSON.parse($))
+    }
+
+    for (let state in states)
+      if (cookies[state] !== undefined)
+        states[state](cookies[state])
+
+  }, [])
 
   useEffect(() => {
     if (State === 'executing')
@@ -110,6 +134,9 @@ const To = () => {
 
     if (State === 'stepped')
       interpreterNext()
+
+    if (State === 'stopped')
+      clearInterval(Timer)
 
   }, [ State ])
 
@@ -153,17 +180,17 @@ const To = () => {
         <div>
           <label>Velocity:</label>
           <Range
-            value={ Speed }
             className='range'
-            onSlide={ _value => SetSpeed(_value) }
+            value={ Settings.speed }
+            onSlide={ $ => SetSettings({ ...Settings, speed: $ }) }
           />
         </div>
 
         <FormGroup check inline>
           <Input
             type='checkbox'
-            defaultChecked={ PauseInterpreter }
-            onChange={ ($: any) => SetPauseInterpreter($.currentTarget.checked) }
+            checked={ Settings.pause }
+            onChange={ ($: any) => SetSettings({ ...Settings, pause: $.currentTarget.checked}) }
           />
           <Label check>Pause</Label>
         </FormGroup>
@@ -192,7 +219,7 @@ const To = () => {
       </Editor>
 
       {
-        Result?.result &&
+        Result?.result !== undefined &&
         <ResultPanel>
           <FadeButton text='JSON Response'>
             <Code language='json' code={ JSON.stringify(Result) }/>

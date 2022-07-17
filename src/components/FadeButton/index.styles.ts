@@ -6,8 +6,6 @@ export const Header = styled.header`
   align-items: center;
 
   padding: 4px 60px;
-
-  cursor: pointer;
 `
 
 export const Main = styled.main`

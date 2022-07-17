@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Container, { Input, Viwer } from './index.styles'
 
 type Props = {
@@ -13,14 +13,18 @@ type Props = {
 
 
 const Range = (props: Props) => {
-  const [ value, setValue ] = useState(props.value || (props.min || 0))
+  const [ Value, SetValue ] = useState(props.value || props.min || 0)
 
-  const $input = useRef<HTMLInputElement>({} as HTMLInputElement)
-  const $viewer = useRef<HTMLDivElement>({} as HTMLInputElement)
+  const $input = useRef({} as HTMLInputElement)
+  const $viewer = useRef({} as HTMLInputElement)
+
+  useEffect(() => {
+    SetValue($ => props.value || $)
+  }, [ props.value ])
 
   const calc_left = () => {
-    setValue(Number($input.current.value))
-    return `calc(${(value - (props.min || 0)) / ((props.max || 100) - (props.min || 0)) * 100}% - ${$viewer.current.clientWidth / 2}px)`
+    SetValue(Number($input.current.value))
+    return `calc(${(Value - (props.min || 0)) / ((props.max || 100) - (props.min || 0)) * 100}% - ${$viewer.current.clientWidth / 2}px)`
   }
 
   const $range_input = () =>
@@ -30,13 +34,13 @@ const Range = (props: Props) => {
     $viewer.current.setAttribute('style', `opacity: 0; visibility: hidden; left: ${calc_left()}`)
 
     if (props.onSlide)
-      props.onSlide(value)
+      props.onSlide(Value)
   }
 
   return (
     <Container className={ props.className }>
       <Viwer ref={ $viewer }>
-        <label>{ value }</label>
+        <label>{ Value }</label>
         <div></div>
       </Viwer>
 
@@ -44,7 +48,7 @@ const Range = (props: Props) => {
         type='range'
         min={ props.min || 0 }
         max={ props.max || 100 }
-        defaultValue={ value }
+        value={ Value }
         step={ props.step || 'normal' }
         onInput={ $range_input }
         onMouseUp={ $range_mouseup }

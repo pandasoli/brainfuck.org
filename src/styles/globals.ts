@@ -53,6 +53,9 @@ export const GlobalStyle = createGlobalStyle`
     --green-cl: #20c997;
     --green-cl-rgb: 32, 201, 151;
 
+    --yellow-cl: #ffc107;
+    --yellow-cl-rgb: 255, 193, 7;
+
     --box-shadow: 0px 0px 3px var(--secondary-cl);
 
     --header-0: 120px;

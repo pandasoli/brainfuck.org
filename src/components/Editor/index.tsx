@@ -7,7 +7,6 @@ import Container, { LineNumbers, Background, DivWarning } from './index.styles'
 type CodeType = {
   edited: boolean
   code: string
-  warnings: number[]
 }
 
 type Props = {
@@ -18,8 +17,11 @@ type Props = {
     index: number
     char: string
     error: string
-    warning: string
-  }
+    warnings: {
+      index: number
+      warning: string
+    }[]
+  } | null
   $btnStop_click: () => any
   $btnContinue_click: () => any
 }
@@ -53,12 +55,12 @@ const Editor = (props: Props) => {
       <ReactSimpleCodeEditor
         className='editorType'
         value={ props.Code.code }
-        onValueChange={ _code => props.SetCode({ edited: true, code: _code, warnings: [] }) }
+        onValueChange={ _code => props.SetCode({ edited: true, code: _code }) }
         highlight={
           _code => <BFHighlight
             code={ _code }
             focusAt={ !props.Code.edited ? props.Result?.index : -1 }
-            warnings={ props.Code.warnings }
+            warnings={ props.Result?.warnings }
             error={ props.Result?.error !== '' }
           />
         }
@@ -69,13 +71,13 @@ const Editor = (props: Props) => {
         props.State !== 'stopped' &&
           <Background>
             <div>
-              <BFHighlight code={ props.Result.char || '' }/>
+              <BFHighlight code={ props.Result?.char || '' }/>
             </div>
 
-            {
-              props.Result?.warning && (
+            {/* {
+              props.Result?.warnings && (
                 <DivWarning>
-                  <label className='warning'>{ props.Result?.warning }</label>
+                  <label className='warning'>{ props.Result?.warnings }</label>
 
                   <div>
                     <Button err mini onClick={ props.$btnStop_click } text='Stop'/>
@@ -83,7 +85,7 @@ const Editor = (props: Props) => {
                   </div>
                 </DivWarning>
               )
-            }
+            } */}
           </Background>
       }
     </Container>

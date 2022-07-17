@@ -16,7 +16,10 @@ type Props = {
   code: string
   focusAt?: number
   error?: boolean | undefined
-  warnings?: number[]
+  warnings?: {
+    index: number
+    warning: string
+  }[]
 }
 
 
@@ -33,8 +36,9 @@ const Brainfuck = (props: Props) => {
       className: `
         ${charId === props.focusAt ? 'focused' : ''}
         ${props.error ? 'error' : ''}
-        ${props.warnings?.includes(charId) ? 'warning' : ''}
-      `
+        ${props.warnings?.map($ => $.index).includes(charId) ? 'warning' : ''}
+      `,
+      title: props.warnings?.map($ => $.index).includes(charId) ? props.warnings[charId].warning : ''
     }
   }
 

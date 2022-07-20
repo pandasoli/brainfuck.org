@@ -12,7 +12,7 @@ type CodesType = {
 
 const Interpreters = () => {
   const [ Codes, SetCodes ] = useState<CodesType>({
-    JavaScript: { repo: 'https://github.com/pandasoli/Brainfuck', link: 'https://raw.githubusercontent.com/pandasoli/Brainfuck/master/interpreter.min.js' }
+    JavaScript: { repo: 'https://github.com/pandasoli/Brainfuck/tree/master/JavaScript', link: 'https://raw.githubusercontent.com/pandasoli/Brainfuck/master/JavaScript/interpreter.min.js' }
   })
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const Interpreters = () => {
         Object.keys(Codes).map(($, _) =>
           <React.Fragment key={ _ }>
             <h2><a href={ Codes[$ as CodeLangs].repo }>{ $ }</a></h2>
-            <BlockCode language={ $.toLowerCase() } code={ Codes[$ as CodeLangs].code || '' }/>
+            <BlockCode language={ $.toLowerCase() } code={ Codes[$ as CodeLangs].code || '' } lineNumbers/>
           </React.Fragment>
         )
       }

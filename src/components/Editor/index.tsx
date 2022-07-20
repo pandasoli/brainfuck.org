@@ -2,7 +2,7 @@ import ReactSimpleCodeEditor from 'react-simple-code-editor'
 import { Button } from 'reactstrap'
 
 import BFHighlight from '../Code/Highlight/Brainfuck'
-import Container, { LineNumbers, Background, DivWarning } from './index.styles'
+import Container, { LineNumbers, Background } from './index.styles'
 
 type CodeType = {
   edited: boolean
@@ -61,7 +61,6 @@ const Editor = (props: Props) => {
             code={ _code }
             focusAt={ !props.Code.edited ? props.Result?.index : -1 }
             warnings={ props.Result?.warnings }
-            error={ props.Result?.error !== '' }
           />
         }
         padding={ 10 }
@@ -73,19 +72,6 @@ const Editor = (props: Props) => {
             <div>
               <BFHighlight code={ props.Result?.char || '' }/>
             </div>
-
-            {/* {
-              props.Result?.warnings && (
-                <DivWarning>
-                  <label className='warning'>{ props.Result?.warnings }</label>
-
-                  <div>
-                    <Button err mini onClick={ props.$btnStop_click } text='Stop'/>
-                    <Button success mini onClick={ props.$btnContinue_click } text='Continue'/>
-                  </div>
-                </DivWarning>
-              )
-            } */}
           </Background>
       }
     </Container>

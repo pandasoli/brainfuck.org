@@ -57,17 +57,6 @@ export const Background = styled.div`
   }
 `
 
-export const DivWarning = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  div {
-    display: flex;
-    justify-content: center;
-  }
-`
-
 export const LineNumbers = styled.ol`
   display: flex;
   flex-direction: column;

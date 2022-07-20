@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 
 export default styled.section`
+  position: relative;
   display: flex;
 
   width: 100%;
@@ -15,6 +16,11 @@ export default styled.section`
   padding-right: 10px;
   padding-left: 20px;
 
+  * {
+    font-family: 'FiraCode' !important;
+    font-size: .8rem !important;
+  }
+
   &.noCopy {
     padding-right: 0;
   }
@@ -27,8 +33,10 @@ export default styled.section`
 export const LineNumbers = styled.ol`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
+
+  min-width: 30px;
 
   margin: 0;
   padding: 4px;
@@ -60,25 +68,10 @@ export const Main = styled.code`
 `
 
 export const Background = styled.div`
-  width: 20px;
+  position: absolute;
+
+  right: 10px;
 
   opacity: 0;
   transition: opacity .6s;
-`
-
-export const Svg = styled.svg`
-  height: 20px;
-
-  cursor: pointer;
-
-  opacity: .8;
-  transition: opacity .6s;
-
-  g path {
-    fill: var(--primary-font-cl);
-  }
-
-  &:hover {
-    opacity: 1;
-  }
 `

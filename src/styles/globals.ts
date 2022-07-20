@@ -42,10 +42,16 @@ export const GlobalStyle = createGlobalStyle`
     --primary-font-cl-rgb: 231, 240, 234;
 
     --primary-cl: #05090e;
+    --primary-cl-rgb: 5, 9, 14;
+
     --primary-cl-light: #0b121c;
+    --primary-cl-light-rgb: 11, 18, 28;
 
     --secondary-cl: #d2de78;
     --secondary-cl-rgb: 210, 222, 120;
+
+    --light-cl: #565f89;
+    --light-cl-rgb: 86, 95, 137;
 
     --red-cl: #de5971;
     --red-cl-rgb: 222, 89, 113;

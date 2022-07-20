@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Label, FormGroup } from 'reactstrap'
-import nookies from 'nookies'
+import * as nookies from '../scripts/nookies'
 
 import FromBrainfuck from '../scripts/FromBrainfuck'
 import FadeButton from '../components/FadeButton'
@@ -13,7 +13,6 @@ import Editor from '../components/Editor'
 import Range from '../components/Range'
 
 import { Header, FooterCharTable, Footer, Main, MemoryHeader, ResultPanel, Hero, HeroBackground } from '../styles/from.styles'
-import { timeEnd } from 'console'
 
 type Result = {
   memory: number[]
@@ -39,7 +38,6 @@ type SettingsType = {
   pause: boolean
   maxMemory: number | null
   speed: number
-  warn: boolean
 }
 
 
@@ -53,12 +51,14 @@ const From = () => {
   const [ Settings, SetSettings ] = useState<SettingsType>({
     pause: true,
     maxMemory: null,
-    speed: 30,
-    warn: true
+    speed: 30
   })
-  const [ Interpreter, SetInterpreter ] = useState<Generator | null>(null)
+  // const [ Interpreter, SetInterpreter ] = useState<Generator | null>(null)
   const [ State, SetState ] = useState<'stopped' | 'executing' | 'stepped' | 'paused'>('stopped')
-  const [ Timer, SetTimer ] = useState({} as NodeJS.Timeout)
+  // const [ Timer, SetTimer ] = useState({} as NodeJS.Timeout)
+
+  const Timer = useRef({} as NodeJS.Timeout)
+  const Interpreter = useRef<Generator | null>(null)
 
   function fillArray(length: number, startBy: number = 0) {
     const res = []
@@ -69,121 +69,116 @@ const From = () => {
     return res
   }
 
-  function interpreterNext() {
-    const response = Interpreter?.next() as { value: Result, done: boolean }
-
-    if (response.value) {
-      SetResult(response.value)
-      SetCode({
-        ...Code,
-        edited: false
-      })
-    }
+  function InterpreterNext() {
+    const response = Interpreter.current?.next() as { value: Result, done: boolean }
 
     if (response.done) {
       SetState('stopped')
     }
-    else if (State === 'stepped')
-      Interpreter?.next()
+    else if (response.value) {
+      SetResult(response.value)
+    }
   }
 
-  function startTimer() {
-    SetTimer(setInterval(interpreterNext, Settings.speed))
+  function StartTimer() {
+    Timer.current = setInterval(InterpreterNext, Settings.speed)
   }
 
-  function startInterpreter(state?: string) {
+  function StartInterpreter(state?: string) {
     SetCode($ => ({ ...$, edited: false }))
 
-    SetInterpreter(
-      FromBrainfuck(
-        Code.code,
-        state === 'stepped' || Settings.pause,
-        Settings.warn,
-        undefined,
-        Settings.maxMemory || undefined
-      )
+    Interpreter.current = FromBrainfuck(
+      Code.code,
+      state === 'stepped' ? 'before' : (Settings.pause ? 'before' : 'none'),
+      undefined,
+      Settings.maxMemory || undefined
     )
   }
 
 
   const $btnStop_click = () => {
     SetState('stopped')
-    SetInterpreter(null)
     SetResult(null)
+    Interpreter.current = null
   }
 
   const $btnExecute_click = () => {
-    startInterpreter()
     SetState('executing')
+    StartInterpreter()
   }
 
-  const $btnPause_click = () => {
+  const $btnPause_click = () =>
     SetState('paused')
-    clearInterval(Timer)
-  }
 
   const $btnContinue_click = () => {
     SetState('executing')
-    startTimer()
+    StartTimer()
   }
 
   const $btnStep_click = () => {
-    clearInterval(Timer)
-
-    if (Interpreter === null)
-      startInterpreter('stepped')
-    else
-      interpreterNext()
-
     if (State !== 'stepped')
       SetState('stepped')
+
+    if (Interpreter.current === null)
+      StartInterpreter('stepped')
+    else
+      InterpreterNext()
   }
 
   const $btnReset_click = () => {
     SetSettings({
       pause: true,
       maxMemory: null,
-      speed: 30,
-      warn: true
+      speed: 30
     })
 
     SetState('stopped')
     SetResult(null)
-    clearInterval(Timer)
   }
 
   window.onbeforeunload = () => {
-    nookies.set(null, 'from-code', Code.code)
-    nookies.set(null, 'from-result', JSON.stringify(Result))
-    nookies.set(null, 'from-settings', JSON.stringify(Settings))
+    nookies.set('from-code', Code.code)
+    nookies.set('from-result', JSON.stringify(Result))
+    nookies.set('from-settings', JSON.stringify(Settings))
   }
 
-  useEffect(() => {
+  window.onload = () => {
     const cookies = nookies.get()
 
     const states: {
       [state: string]: ($: string) => any
     } = {
       'from-code': ($2: string) => SetCode($ => ({ ...$, code: $2 })),
-      'from-result': ($: string) => SetResult(JSON.parse($)),
-      'from-settings': ($: string) => SetSettings(JSON.parse($)),
+      'from-result': ($: string) => {
+        const data = JSON.parse($)
+
+        Interpreter.current = FromBrainfuck(
+          Code.code,
+          Settings.pause ? 'after' : 'none',
+          undefined,
+          Settings.maxMemory || undefined,
+          data
+        )
+
+        SetResult(data)
+      },
+      'from-settings': ($: string) => SetSettings(JSON.parse($))
     }
 
     for (let state in states)
       if (cookies[state] !== undefined)
         states[state](cookies[state])
-
-  }, [])
+  }
 
   useEffect(() => {
     if (State === 'executing')
-      startTimer()
-
-    if (State === 'stopped')
-      clearInterval(Timer)
+      StartTimer()
 
     if (State === 'stepped')
-      interpreterNext()
+      InterpreterNext()
+
+    if (State === 'paused' || State === 'stopped' || State === 'stepped')
+      clearInterval(Timer.current)
 
   }, [ State ])
 
@@ -201,7 +196,7 @@ const From = () => {
           <>
             <Button color='success' className='mini' onClick={ $btnExecute_click }>Execute</Button>
             <Button color='success' className='mini' onClick={ $btnStep_click }>Step</Button>
-            <Button color='primary' outline className='mini' onClick={ $btnReset_click }>Reset</Button>
+            <Button outline className='mini' onClick={ $btnReset_click }>Reset</Button>
           </>
         }
         {
@@ -249,15 +244,6 @@ const From = () => {
             onChange={ ($: any) => SetSettings({ ...Settings, pause: $.currentTarget.checked}) }
           />
           <Label check>Pause</Label>
-        </FormGroup>
-
-        <FormGroup check inline>
-          <Input
-            type='checkbox'
-            checked={ Settings.warn }
-            onChange={ ($: any) => SetSettings({ ...Settings, warn: $.currentTarget.checked}) }
-          />
-          <Label check>Warn</Label>
         </FormGroup>
       </div>
     </Header>

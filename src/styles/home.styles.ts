@@ -70,7 +70,7 @@ export const Main = styled.section`
 
   padding: 20px 20px 0px 20px;
 
-  .btn {
+  & > .btn {
     margin-top: 40px;
   }
 `

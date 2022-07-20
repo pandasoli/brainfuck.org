@@ -53,7 +53,7 @@ const BlockCode = (props: Props) => {
 
         {
           props.language === 'brainfuck' &&
-          <Button className='mini' onClick={ $btnRun_click }>Run</Button>
+          <Button className='mini' color='secondary' onClick={ $btnRun_click }>Run</Button>
         }
       </Background>
     }

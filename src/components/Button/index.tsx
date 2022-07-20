@@ -23,6 +23,7 @@ const Button = (props: ButtonProps) => {
 
   return <ButtonStyle
     { ...props }
+    color={ props.color || 'primary' }
     href={ undefined }
     onClick={ _click }
   >

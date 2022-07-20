@@ -1,106 +1,79 @@
-import styled from 'styled-components'
-import { Button } from 'reactstrap'
+import styled, { css } from 'styled-components'
+import { Button as ButtonStyle } from 'reactstrap'
 
 
-export default styled(Button)`
-  &.btn {
-    display: inline-block;
+const Btn = (ft: string, bg: string, outline: boolean) => css`
+  color: var(${outline ? bg : ft}) !important;
+  background-color: ${outline ? 'transparent' : `var(${bg})`} !important;
+  border: 1px solid var(${bg}) !important;
 
-    margin: 4px;
-    padding: 9px 40px;
-    border-radius: 6px;
+  &:hover:not(:disabled),
+  &:focus:not(:disabled) {
+    color: var(${outline ? ft : bg}) !important;
+    background-color: ${outline ? `var(${bg})` : 'transparent'} !important;
+  }
 
-    font-size: min(4.4vw, 1.06rem);
-    font-family: 'MavenPro';
-    cursor: pointer;
-    font-size: var(--text-regular);
-    font-weight: var(--font-weight-medium);
-    text-align: center;
-    text-decoration: none;
-    user-select: none;
-    color: var(--primary-cl);
+  &:focus:not(:disabled) {
+    --cl: rgba(var(${bg + '-rgb'}), .60);
+    border-color: var(--cl) !important;
+    box-shadow: 0 0 0 .25rem var(--cl);
+  }
+`
 
-    background-color: var(--primary-font-cl);
-    border-radius: 25px;
-    transition: opacity .6s, background-color .6s, color .2s;
-    border: 1px solid var(--primary-font-cl);
+
+export default styled(ButtonStyle)`
+  display: inline-block;
+  margin: 4px 8px;
+  padding: 9px 40px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  border-radius: 25px;
+  transition: opacity .6s, background-color .6s, color .6s, border-color .6s, box-shadow .2s;
+  ${ Btn('--primary-cl', '--primary-font-cl', false) }
+
+  &.btn-outline-primary {
+    ${ Btn('--primary-cl', '--primary-font-cl', true) }
+  }
+
+  &.btn-secondary {
+    ${ Btn('--primary-cl-light', '--light-cl', false) }
+  }
+  &.btn-outline-secondary {
+    ${ Btn('--primary-cl-light', '--light-cl', true) }
   }
 
   &.mini {
     padding: 5px 40px;
   }
 
-  &.btn-outline-primary {
-    color: var(--primary-font-cl);
-    background-color: transparent;
+  &.btn-success {
+    ${ Btn('--primary-cl', '--green-cl', false) }
+  }
+  &.btn-outline-success {
+    ${ Btn('--primary-cl', '--green-cl', true) }
   }
 
-  &.btn-success {
-    color: var(--primary-cl);
-    background-color: var(--green-cl);
-    border-color: var(--green-cl);
+  &.btn-warning {
+    ${ Btn('--primary-cl', '--yellow-cl', false) }
+  }
+  &.btn-outline-warning {
+    ${ Btn('--primary-cl', '--yellow-cl', true) }
   }
 
   &.btn-error {
-    color: var(--primary-cl);
-    background-color: var(--red-cl);
-    border-color: var(--red-cl);
+    ${ Btn('--primary-cl', '--red-cl', false) }
+  }
+  &.btn-outline-error {
+    ${ Btn('--primary-cl', '--red-cl', true) }
   }
 
-  &.btn-outline-success {
-    color: var(--green-cl);
-    background-color: transparent;
-    border-color: var(--green-cl);
-  }
-
-  &:hover:not([disabled]),
-  &:focus:not([disabled]) {
-    &.btn-primary {
-      color: var(--primary-font-cl);
-      background-color: transparent;
-    }
-
-    &.btn-outline-primary {
-      color: var(--primary-cl);
-      background-color: var(--primary-font-cl);
-    }
-
-    &.btn-success {
-      color: var(--green-cl);
-      background-color: transparent;
-    }
-
-    &.btn-error {
-      color: var(--red-cl);
-      background-color: transparent;
-    }
-
-    &.btn-outline-success {
-      color: var(--primary-cl);
-      background-color: var(--green-cl);
-    }
-  }
-
-  &:focus:not([disabled]) {
-    box-shadow: 0 0 0 .25rem rgba(var(--primary-font-cl-rgb), .68);
-
-    &.btn-error,
-    &.btn-outline-error {
-      box-shadow: 0 0 0 .25rem rgba(var(--red-cl-rgb), .68);
-    }
-
-    &.btn-success,
-    &.btn-outline-success {
-      box-shadow: 0 0 0 .25rem rgba(var(--green-cl-rgb), .68);
-    }
-  }
-
-  &[disabled] {
-    opacity: .7;
-
+  &:disabled {
+    opacity: .8;
     &, & * {
       cursor: no-drop;
     }
   }
 `
-

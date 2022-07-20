@@ -6,6 +6,7 @@ export default styled.section`
   display: flex;
 
   width: 100%;
+  min-height: 40px;
   max-width: 100%;
 
   @media (max-width: 768px) { max-width: 100%; }
